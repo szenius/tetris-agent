@@ -10,8 +10,7 @@ public class PlayerSkeleton {
 		int[][] currentField = copyArray(s.getField());
 
 		//Step 2. Test all possible moves of the piece on the board and choose the move with the best heuristic score 
-		tryPossibleMoves(currentField, legalMoves);
-		//System.out.println("Heuristic score = " + Heuristic.evaluate(s) + " --> ");
+		//int best = tryPossibleMoves(currentField, legalMoves);
 
 		return 0;
 	}
@@ -21,7 +20,54 @@ public class PlayerSkeleton {
 	* @param currentField (current board config), legalMoves (current piece to place)
 	* @return move with best (highest) heuristic score
 	**/
-	private void tryPossibleMoves(int[][] currentField, int[][] legalMoves) {
+	private int tryPossibleMoves(int[][] currentField, int[][] legalMoves) {
+		//legalMoves = all possible moves of the current piece.
+		//Step 1. Apply each move (action) to get the change field (board configuration).
+		//Step 2. Apply Heuristic.evaluate(s) to get the heuristic score from the move.
+		//Step 3. Get the best move.
+		int bestScore = 0;
+		int bestMove = 0;
+
+		for(int i=0; i<legalMoves.length; i++) {
+			//Step 1
+			//int [][] updatedField = testMove(legalMoves[i]);
+			//Step 2
+			//int score = Heuristic.evaluate(updatedField, rowsCleared);
+			//System.out.println("Heuristic score = " + Heuristic.evaluate(s));
+
+			//Step 3
+			//if(score > bestScore) {
+			//	bestScore = score;
+			//	bestMove = i;
+			//}
+
+		}
+		
+		return bestMove;
+	}
+
+	/**
+	* This method gets the change field from testing the possible move of a piece. 
+	* @param move
+	* @return new board configuration after applying the move (action)
+	**/
+	private void testMove(int[] move) {
+		int orient = move[0];
+		int slot = move[1];
+	}
+
+	/**
+	* This method prints current board configuration
+	* @param currentField
+	**/
+	private void printField(int[][] currentField) {
+		System.out.println("========Field==============");
+		for(int i=0; i<currentField.length; i++) {
+			for(int j=0; j<currentField[i].length; j++) {
+				System.out.print(currentField[i][j]);
+			}
+			System.out.println();
+		}
 	}
 
 	/**
@@ -50,7 +96,7 @@ public class PlayerSkeleton {
 
 		int[][] newArray = new int[originalArray.length][];
 		for(int i=0; i<originalArray.length; i++) {
-			newArray[i] = Arrays.copyOf(originalArray[i], originalArray.length);
+			newArray[i] = Arrays.copyOf(originalArray[i], originalArray[i].length);
 		}
 		return newArray;
 	}
