@@ -21,8 +21,8 @@ public class Heuristic {
 				+ wMaxColHeight(colHeights) + wNumHoles(field, colHeights);
 	}
 
-	 // TODO: read from file instead
-	 private static void readWeights() {
+	// TODO: read from file instead
+	private static void readWeights() {
 		weights = new int[NUM_FEATURES];
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = 1;
