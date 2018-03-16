@@ -3,7 +3,7 @@ public class Heuristic {
 	static int[] weights;
 	static int weightCounter;
 
-	public static int evaluate(State s) {
+	public static int evaluate(TempState s) {
 		weightCounter = 0;
 		readWeights();
 		int[][] field = s.getField();
