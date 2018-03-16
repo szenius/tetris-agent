@@ -3,9 +3,10 @@ public class Heuristic {
 	static int[] weights;
 	static int weightCounter;
 
-	public static int evaluate(int[][] field, int rowsCleared) {
+	public static int evaluate(State s) {
 		weightCounter = 0;
 		readWeights();
+		int[][] field = s.getField();
 
 		// print field
 		// for (int i = 0; i < field.length; i++) {
@@ -16,7 +17,7 @@ public class Heuristic {
 		// }
 
 		int[] colHeights = colHeights(field);
-		return rowsCleared + wSumColHeight(colHeights) + wSumColDiff(colHeights) 
+		return s.getRowsCleared() + wSumColHeight(colHeights) + wSumColDiff(colHeights) 
 				+ wMaxColHeight(colHeights) + wNumHoles(field, colHeights);
 	}
 
