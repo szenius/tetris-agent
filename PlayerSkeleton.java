@@ -33,11 +33,10 @@ public class PlayerSkeleton {
 		int bestScore = 0;
 		int bestMove = 0;
 
-		int[] top = copyArray(s.getTop());
-
 		for(int i=0; i<legalMoves.length; i++) {
 			//Step 1
 			int [][] field = copyArray(currentField);
+			int[] top = copyArray(s.getTop());
 			Pair results = testMove(legalMoves[i], field, s.getNextPiece(), top);
 			//Step 2
 			if(results == null) {
@@ -53,7 +52,6 @@ public class PlayerSkeleton {
 			}
 
 		}
-		
 		return bestMove;
 	}
 
@@ -146,10 +144,10 @@ public class PlayerSkeleton {
 	* @Param s (current board configuration)
 	**/
 	private void getPieceInformation(State s) {
-		pBottom = copyArray(s.getpBottom());
-		pTop = copyArray(s.getpTop());
-		pHeight = copyArray(s.getpHeight());
-		pWidth = copyArray(s.getpWidth());
+		pBottom = s.getpBottom();
+		pTop = s.getpTop();
+		pHeight = s.getpHeight();
+		pWidth = s.getpWidth();
 	}
 
 	/**
