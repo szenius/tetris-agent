@@ -1,3 +1,7 @@
 *.class
 *.jar
 .DS_Store
+*JSwarm/papers/*
+*JSwarm/doc/*
+*JSwarm/META-INF/*
+*JSwarm/oldHtml/*
