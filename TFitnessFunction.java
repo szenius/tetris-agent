@@ -1,4 +1,4 @@
-import net.sourceforge.jswarm_pso.FitnessFunction;
+import JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
 import java.util.Arrays.*;
 import java.util.*;
 
@@ -23,9 +23,23 @@ public class TFitnessFunction extends FitnessFunction {
 
 	// Try to play the game given the combination of weights (given by position)
 	// Output the (average? TODO:) number of rows cleared for this set of weights
+	// TODO: parallel?
 	private int playGame(double[] position) {
-		// TODO: play the game and return number of rows cleared
-		return -1; // stub
+		State s = new State();
+		new TFrame(s);
+		PlayerSkeleton p = new PlayerSkeleton();
+		while(!s.hasLost()) {
+			s.makeMove(p.pickMove(s,s.legalMoves(),position));
+			s.draw();
+			s.drawNext(0,0);
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("For " + generatePositionKey(position) + ": " + s.getRowsCleared());
+		return s.getRowsCleared();
 	}
 
 	// Return string version of position array as key

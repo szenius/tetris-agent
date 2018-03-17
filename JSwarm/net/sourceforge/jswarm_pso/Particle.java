@@ -1,4 +1,4 @@
-package net.sourceforge.jswarm_pso;
+package JSwarm.net.sourceforge.jswarm_pso;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

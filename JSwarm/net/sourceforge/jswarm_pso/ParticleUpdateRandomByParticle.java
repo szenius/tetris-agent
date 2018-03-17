@@ -1,4 +1,4 @@
-package net.sourceforge.jswarm_pso;
+package JSwarm.net.sourceforge.jswarm_pso;
 
 /**
  * Particle update: Each particle selects an rlocal and rother 
