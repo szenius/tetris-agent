@@ -1,0 +1,150 @@
+<HTML lang=en dir=ltr xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<HEAD>
+	<TITLE>JSwarm-PSO</TITLE>
+	<META http-equiv=Content-Type content="text/html; charset=utf-8">
+	<META content="JSwarm-PSO, PSO, Particle swarm optimization, Swarm, Optimization, GLobal Optimization" name=KEYWORDS>
+	<META content=index,follow name=robots>
+</HEAD>
+<BODY class=ns-0>
+
+<CENTER> <H3 class=firstHeading>JSwarm-PSO: Particle swarm optimization</H3></CENTER>
+
+<CENTER> <A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=141969&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></A> <BR></CENTER> <P>
+
+<B>JSwarm-PSO</B> is a <I><B>Particle swarm optimization</B></I> package written in Java. PSO is an optimization technique used to find global optimum for complex problems. Roughly stated, it's in the same 'category' as <I><B>Genetic algorithms</B></I> or <I><B>Simmilated annealing</B></I>. If you don't know what PSO is, I recommend you to start reading <A href="http://en.wikipedia.org/wiki/Particle_swarm_optimization">wikipedia's definition</A>. <BR>
+JSwarm-PSO is designed to require minimum effort to use while also highly modular. 
+<UL>
+  <LI><A href="http://sourceforge.net/project/showfiles.php?group_id=141969&amp;package_id=156804&amp;release_id=339001">Download</A> 
+  <LI><A href="http://jswarm-pso.sourceforge.net/doc/index.html">Project's JavaDoc</A> 
+  <LI><A href="http://sourceforge.net/projects/jswarm-pso/">Project's summary page</A> 
+</UL>
+
+<p><B>Optimization example</B><p>
+This example tries to minimize Rastrigin's function which has infinie local minimum and maximum
+(see <A href="http://www.mathworks.com/access/helpdesk/help/toolbox/gads/ga_intr6.html#10136">Matlab's page</a> for definitions).<br>
+You can run the example just typing the command (on unix like enviroments):<BR>
+<PRE>
+	<B>java -jar jswarm-pso_1_0_3.jar</B> 
+</PRE>
+On Windows it sohuld be enough to just double click on jar file.<br>
+
+<p><B>How to optimize your own function / model</B><p>
+This is a simple description of the code you'll find in <b>jswarm-pso.example1</b>:
+<ul>
+	<li> Create your own <b>Fitness function</b>. It must derive from <b>jswarm_pso.FitnessFunction</b> and custom <b>evaluate</b> method must be created.
+	<table width="80%" border=1 align=center><tr><td>
+<pre>
+import jswarm_pso.FitnessFunction;
+public class MyFitnessFunction extends FitnessFunction {
+	public double evaluate(double position[]) { 
+		return position[0] + position[1]; 
+	}
+} </pre>
+	</td></tr></table>
+	<p>
+
+	<li> Create your own particle</b> derived from <b>jswarm_pso.Particle</b>
+	<table width="80%" border=1 align=center><tr><td>
+<pre>
+import jswarm_pso.Particle;
+public class MyParticle extends Particle {
+	// Create a 2-dimentional particle
+	public MyParticle() { super(2); } 
+}
+</pre>
+	</td></tr></table><p>
+
+	<li> Cerate a <b>Swarm</b> and <b>evolve</b> for a few iterations (use your favourite <b>stop criteria</b>)
+	<table width="80%" border=1 align=center><tr><td>
+<pre>
+// Create a swarm (using 'MyParticle' as sample particle 
+// and 'MyFitnessFunction' as finess function)
+Swarm swarm = new Swarm(Swarm.DEFAULT_NUMBER_OF_PARTICLES
+		, new MyParticle()
+		, new MyFitnessFunction());
+// Set position (and velocity) constraints. 
+// i.e.: where to look for solutions
+swarm.setMaxPosition(1);
+swarm.setMinPosition(0);
+// Optimize a few times
+for( int i = 0; i < 20; i++ ) swarm.evolve();
+// Print en results
+System.out.println(swarm.toStringStats())
+</pre>
+	</td></tr></table>
+</ul>
+
+<p><b>Usuall / Deafult settings</b><p>
+Optimization type:
+<ul>
+	<li> FitnessFunction.setMaximize(): [Deafult: true]
+	<ul>
+		<li> <b>true</b> if you want to maximize your fitness function, 
+		<li> <b>false</b> if you want to minimize it. 
+	</ul>
+</ul>
+Particle's velocity update (to understand next settings, you'll probably need to read <i>"Particle position and velocity update"</i>)
+<ul>
+	<li> Swarm.globalIncrement: Increment used to update particle's velocity towards global best position. [Default value: 0.9];
+	<li> Swarm.inertia: Particle's inertia (to keep prior velocity). [Default: 1.0]
+	<li> Swarm.particleIncrement: Increment used to update particle's velocity towards local best position. [Default value: 0.9];
+</ul>
+
+Position restrictions (<b>these restrictions must always be setted</b>):
+<ul>
+	<li> Swarm.maxPosition[]: Maximum possible position for each dimention (restricts where the particles can move)
+	<li> Swarm.minPosition[]: Minumum possible position for each dimention (restricts where the particles can move)
+</ul>
+
+Velocity restrictions:
+<ul>
+	<li> Swarm.maxVelocity[]: Maximum possible velocity for each dimention (restricts how fast the particle can move)
+	<li> Swarm.minVelocity[]: Minumum possible velocity for each dimention (restricts how fast the particle can move with negative speed).<br>
+	<ul>
+		<li><b>Warning:</b> this setting should be <i>minVelocity[i] = - maxVelocity[i]</i>, except on very strange optimization problems.
+	</ul>
+</ul>
+
+
+<p><b>Particle position and velocity update</b><p>
+Each time the swarm evolves, updates every particle's position and velocity (see <b>jswarm-pso.Particle.update()</b> for details).<br>
+Particle's position is updated (for each dimention <i>i</i>):
+<table width="80%" border=1 align=center><tr><td>
+<pre>
+// Update position
+position[i] = position[i] + velocity[i]
+</pre>
+</td></tr></table>
+<p>
+While particle's velocity is updated (for each dimention <i>i</i>):
+<table width="80%" border=1 align=center><tr><td>
+<pre>
+// Update velocity
+velocity[i] = inertia * velocity[i] // Inertia
+		+ randLocal * particleIncrement * (bestPosition[i] - position[i]) // Local best
+		+ randGlobal * globalIncrement * (globalBestPosition[i] - position[i]); // Global best
+</pre>
+</td></tr></table>
+where <b>randLocal</b> and <b>randGlobal</b> are two random number, uniformly distributted on the interval [0,1].<p>
+
+<p> <b>Frequently asked questions</b><p>
+
+
+<p><B>To do: Future releases</B><p>
+<UL>
+  <LI>Add neighbourhood concept 
+  <LI>3D Swarm Graphs 
+  <LI>Add <I><B>Repulsive swarm optimization</B></I> algorithm 
+  <LI>Add MPI support for distributted processing 
+</UL>
+
+<hr>
+
+<table align=right><tr><td>
+	Please send your comments to: 
+	<a href=mailto:pcingola@users.sourceforge.net>Pablo Cingolani &lt;pcingola@users.sourceforge.net&gt;</a>
+	<a href="http://www.tacner.com/u/pcingola/">.</a><br>
+</td></tr></table>
+
+</BODY>
+</HTML>

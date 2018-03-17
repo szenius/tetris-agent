@@ -1,0 +1,3207 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="Generator" content="Microsoft Word 97">
+
+<title>It needs to have some exploitation ability</title><meta name="Template" content="K:\OFFICE97\OFFICE\html.dot"></head>
+<body link="#0000ff" vlink="#800080">
+
+<b><font size="5"><p align="center">Parameter Selection in Particle Swarm Optimization</p>
+</font></b><font size="4"><p align="center">Yuhui Shi and Russell C. Eberhart</p>
+</font><i><font size="2"></font></i><p align="center"><i><font size="2">Department of Electrical Engineering</font></i></p>
+<p align="center"><i><font size="2">Indiana University Purdue University Indianapolis</font></i></p>
+<p align="center"><i><font size="2">723 W. Michigan St., SL160</font></i></p>
+<p align="center"><i><font size="2">Indianapolis, IN 46202</font></i></p>
+<p align="center"><font size="2">shi,</font><a href="mailto:eberhart@tech.iupui.edu"><font size="2">eberhart@tech.iupui.edu</font></a></p>
+<i></i><p align="center"><i> </i></p>
+<i><b><font size="4"><p align="center">Abstract</p>
+</font></b><font size="4"></font></i><font size="2"></font><p><font size="2">In
+this paper, the authors first analyze the impact that the inertia
+weight and maximum velocity have on the performance of the particle
+swarm optimizer, and then provide guidelines for selecting these two
+parameters. Analysis of experiments demonstrates the validity of these
+guidelines.</font></p>
+<p><font size="2"> </font></p>
+<b><font size="4"><p>Introduction</p>
+</font></b><p>Different from traditional search algorithms,
+evolutionary computation techniques work on a population of potential
+solutions (points) of the search space. Through cooperation and
+competition among the potential solutions, these techniques often can
+find optima more quickly when applied to complex optimization problems.
+The most commonly used population-based evolutionary computation
+techniques are motivated from the evolution of nature. Four well-known
+examples are genetic algorithms [6], evolutionary programming [5],
+evolutionary strategies [10] and genetic programming [9]. Different
+from these evolution-motivated evolutionary computation techniques, a
+new evolutionary computation technique, called Particle Swarm
+Optimization (PSO), is motivated from the simulation of social
+behavior. PSO was originally designed and developed by Eberhart and
+Kennedy [3,4,7,8]. By adding a new inertia weight into PSO, a new
+version of PSO is introduced in [12]. In PSO, instead of using genetic
+operators, each particle (individual) adjusts its "flying" according to
+its own flying experience and its companions’ flying experience. Each
+particle is treated as a point in a D-dimensional space. The <i>i</i>th particle is represented as X<sub>I </sub>= (x<sub>i1</sub>,x<sub>i2</sub>, … , x<sub>iD</sub>). The best previous position (the position giving the best fitness value) of the <i>i</i>th particle is recorded and represented as P<sub>I </sub>= (p<sub>i1</sub>,p<sub>i2</sub>, … , p<sub>iD</sub>). The index of the best particle among all the particles in the population is represented by the symbol <i>g</i>. The rate of the position change (velocity) for particle <i>i</i> is represented as V<sub>I </sub>= (v<sub>i1</sub>,v<sub>i2</sub>, … , v<sub>iD</sub>). The particles are manipulated according to the following equation:</p>
+<p align="center">v<sub>id</sub> = w * v<sub>id</sub> + c<sub>1 </sub>* rand( ) * ( p<sub>id</sub> – x<sub>id</sub> ) + c<sub>2</sub> * Rand( ) * (p<sub>gd</sub> –x<sub>id</sub> ) (1a)</p><dir>
+<dir>
+
+<p>x<sub>id</sub> = x<sub>id</sub> + v<sub>id</sub> (1b)</p></dir>
+</dir>
+
+<p>where c<sub>1</sub> and c<sub>2</sub> are two positive constants,
+rand() and Rand() are two random functions in the range [0,1], and w is
+the inertia weight. Equation (1a) is used to calculate the particle’s
+new velocity according to its previous velocity and the distances of
+its current position from its own best experience (position) and the
+group’s best experience. Then the particle flies toward a new position
+according to equation (1b). The performance of each particle is
+measured according to a pre-defined fitness function, which is related
+to the problem to be solved. The inertia weight w is employed to
+control the impact of the previous history of velocities on the current
+velocity, thus to influence the trade-off between global (wide-ranging)
+and local (nearby) exploration abilities of the "flying points". A
+larger inertia weight w facilitates global exploration (searching new
+areas) while a smaller inertia weight tends to facilitate local
+exploration to fine-tune the current search area. Suitable selection of
+the inertia weight w can provide a balance between global and local
+exploration abilities and thus require less iterations on average to
+find the optimum. In this paper, an analysis of the impact of this
+inertia weight together with the maximum velocity allowed on the
+performance of PSO is given, followed by experiments that illustrate
+the analysis and provide some insights into optimal selection of the
+inertia weight and maximum velocity allowed.</p>
+<b><font size="4"><p align="center">Analysis</p>
+</font></b><p>PSO, to some extent, resembles evolutionary programming.
+The addition of velocity to the current position to generate the next
+position is similar to the mutation operation in evolutionary
+programming except that "mutation" in PSO is guided by a particle’s own
+"flying" experience and the group’s "flying" experience. In another
+words, PSO performs "mutation" with a "conscience." By looking at the
+personal best elements associated with each individual as additional
+population members, PSO also has a form of selection even though it is
+quite weak [1]. In evolutionary programming, the global and local
+exploration abilities are brought in by the mutation and controlled by
+the variances of the Gaussian random functions employed. In order to
+balance between the global and local exploration abilities and obtain a
+quick search, the variances can also be encoded into the individuals
+and therefore evolved simultaneously, as done in evolutionary strategy
+[10]. In PSO the balance between the global and local exploration
+abilities is mainly controlled by the inertia weights. In [12],
+experiments have been performed to illustrate this. By setting the
+maximum velocity allowed to be two, it was found that PSO with an
+inertia weight in the range [0.9, 1.2] on average has a better
+performance; that is, it has a larger chance to find the global optimum
+within a reasonable number of iterations. Furthermore, a time
+decreasing inertia weight from 1.4 to 0 is found to be better that a
+fixed inertia weight. This is because the larger inertia weights at the
+beginning help to find good seeds and the later small inertia weights
+facilitate fine search.</p>
+<p>By looking at equation (1) more closely, it can be seen that the
+maximum velocity allowed actually serves as a constraint that controls
+the maximum global exploration ability PSO can have. By setting a too
+small maximum velocity allowed, maximum global exploration ability is
+limited, and PSO will always favor a local search no matter what the
+inertia weight is. By setting a large maximum velocity allowed, then
+the PSO can have a large range of exploration ability to select by
+selecting the inertia weight. Since the maximum velocity allowed
+affects global exploration ability indirectly and the inertia weight
+affects it directly, it will generally be better to control global
+exploration ability through inertia weight only. A way to do that is to
+delete maximum velocity allowed in the algorithm implementation, and
+allow inertia weight itself to control exploration ability. But this
+should be done very carefully. It’s not a good idea for PSO to do
+global exploration all the time because this will mean that the system
+will always be eager to explore new areas and consequently make the
+system lack local exploration ability, and fail to find the solution.
+From the above, it’s clear that choosing a large inertia weight to
+facilitate more global exploration is not a good strategy, and a
+smaller inertia weight should be selected to achieve a balance between
+global and local exploration so that a faster search results.</p>
+<font size="2"><p> </p>
+</font><b><font size="4"><p>Experiments and Discussion</p>
+</font></b><p>In order to see the influence which the inertia weight
+has on PSO performance under different maximum velocities allowed, the
+benchmark problem of Schaffer’s f6 function [2] was chosen as the test
+problem since it is well-known and its global optimum is known. The PSO
+implementation was written in C and compiled using the Borland C++
+Version 4.5 compiler. For purposes of comparison, all the simulations
+use the same parameter settings for the PSO implementation except the
+inertia weight <i>w</i> and maximum velocity allowed. The population
+size (number of particles) is 20. The dynamic range for each element of
+a particle is defined as (-100, 100), that is, the particle cannot move
+out of this range in each dimension and thus Xmax = 100. The maximum
+number of iterations allowed is 4000. If the PSO implementation cannot
+find a acceptable solution within 4000 iterations, it is ruled that it
+fails to find the global optimum in this run.</p>
+<p>Different inertia weights <i>w</i> under different maximum velocities (Vmax) allowed have been chosen for simulation. For each selected <i>w</i>
+and Vmax, thirty runs are performed and the iterations required for
+finding the global optimum are recorded. First, the maximum velocity
+allowed was set to 3, 30 runs were done for a set of different inertia
+weights, and the results are given in Table 1. From Table 1, it is seen
+that only when <i>w</i> = 0.9 do all the 30 runs find the global
+optimum; all other weights have some runs that fail to find the global
+optimum within 4000 iterations. The number of failures versus inertia
+weights is shown in Figure 2. For comparison, the result in [12] is
+adopted here and shown in Figure 1. Comparing Figure 2 and Figure 1, it
+is easy to see that the inertia weight with no failures has changed
+from 1.05 to 0.9, which is consistent with our analysis in the previous
+section. Also notice that the average number of iterations required to
+find the global optimum has decreased from 1912 to 738. This is a
+significant improvement. </p>
+<p>According to the analysis in the previous section, it is natural to
+think that with an increase of maximum velocity allowed, the inertia
+weight without failure should decrease and the average number of
+iterations required is expected to decrease. To illustrate this, two
+experiments are performed with Vmax = 4 and Vmax = 5, respectively. The
+results are recorded in Tables 2 and 3, and the number of failures
+versus inertia weights appear in Figures 3 and 4, respectively. From
+Figures 3 and 4, we see now that for both w = 0.9 and w = 0.8 the PSO
+implementation finds the global optimum for all 30 runs. The inertia
+weight without failure is moving toward the zero, but slowly. From
+Tables 2 and 3, the average number of iterations (w = 0.8) has dropped
+from 738 (w = 0.9) to 439 (Vmax = 4) and 366 (Vmax = 5). From the
+previous results, it is observed that the inertia weight without
+failure changes more slowly than Vmax does. To further clarify this, we
+set Vmax = 10 and run the experiment again with varying inertia
+weights. Results are given in Table 4, and number of failures versus
+weights is shown in Figure 5. The only inertia weight without failure
+is w = 0.8. The average number of iterations is 460, which is a little
+larger than the previous two, but still very good compared with those
+for Vmax &lt;= 3. </p>
+<p>From the previous experiments, we know the inertia weight without
+failure decreased more slowly than the maximum velocity allowed
+increased. So what will happen if we eliminate the constraint of Vmax?
+Will this degrade the performance of PSO or even destroy it? To explore
+this, we set Vmax = Xmax. This is reasonable since [-Xmax, Xmax] is the
+dynamic range of the elements of each particle. The result is given in
+Table 5, and number of failures versus weights is illustrated in Figure
+6. It’s a surprise to find that w = 0.8 is the inertia weight without
+failure again. This time, the average number of iterations increased to
+974 (still better than the result in [12]), but this seems to be a good
+sign since we may not need to consider how to select Vmax. In many
+practical problems, it’s difficult to select the best Vmax without
+trial-and-error. </p>
+<p>To compensate for the increase in the average number of iterations
+brought on by deleting Vmax, a time decreasing inertia weight is
+employed instead of a fixed weight. It’s expected that improvement can
+be obtained by doing so because we believe that the increase in average
+number of iterations is due to the significant increase in global
+search caused by deleting Vmax. A time dependent inertia weight is one
+way to compensate for this. Based on the previous results, we define
+the inertia weight w to linearly decrease from 0.9 to 0.4 during the
+first 1500 iterations and stay constant at 0.4 for the remaining 2500
+iterations. Thirty runs were conducted and the results are given in
+Table 6. From Table 6, we can see that all 30 runs found the optimum
+and the average number of iterations is the lowest among all of the
+experimental settings. Another significant observation is that the
+variance of iterations required to find the global optimum is also the
+smallest.</p>
+<b><font size="4"><p>Conclusions</p>
+</font></b><p>In this paper, we have analyzed the impact of the inertia
+weight and maximum velocity allowed on the performance of PSO. A number
+of experiments have been done with different inertia weights and
+different values of maximum velocity allowed. It is concluded that when
+Vmax is small (&lt;= 2 for the f6 function), an inertia weight of
+approximately 1 is a good choice, while when Vmax is not small (&gt;=
+3), an inertia weight w = 0.8 is a good choice. When we lack knowledge
+regarding the selection of Vmax, it is also a good choice to set Vmax
+equal to Xmax and an inertia weight w = 0.8 is a good starting point.
+Furthermore if a time varying inertia weight is employed, even better
+performance can be expected.</p>
+<p>Even though good experimental results have been obtained in this
+paper, only a small benchmark problem has been tested. The selection of
+the inertia parameter and maximum velocity allowed may be
+problem-dependent. To fully justify the benefits of selecting
+parameters as described in this paper, more problems need to be tested.
+By doing so, a clearer understanding of PSO performance will be
+obtained. Indeed, a fuzzy system [11] may be a good candidate for
+online tuning of the inertia weight. </p>
+<b><i><font size="4"></font></i></b><p><b><i><font size="4">References</font></i></b></p>
+<ol>
+
+<li>Angeline, P. J. (1998), Using Selection to Improve Particle Swarm
+Optimization, IEEE International Conference on Evolutionary
+Computation, Anchorage, Alaska, May 4-9, 1998.</li>
+<li>Davis, L., Ed. (1991), Handbook of Genetic Algorithms, New York, NY: Van Nostrand Reinhold.</li>
+<li>Eberhart, R. C., Dobbins, R. W., and Simpson, P. (1996), Computational Intelligence PC Tools, Boston: Academic Press.</li>
+<li>Eberhart, R. C., and Kennedy, J. (1995). A New Optimizer Using
+Particles Swarm Theory, Proc. Sixth International Symposium on Micro
+Machine and Human Science (Nagoya, Japan), IEEE Service Center,
+Piscataway, NJ, 39-43.</li>
+<li>Fogel, L. J. (1994), Evolutionary Programming in Perspective: the
+Top-down View, In Computational Intelligence: Imitating Life, J.M.
+Zurada, R. J. Marks II, and C. J. Robinson, Eds., IEEE Press,
+Piscataway, NJ.</li>
+<li>Goldberg, D. E. (1989), Genetic Algorithms in Search, Optimization, and Machine Learning, Reading MA: Addison-Welsey.</li>
+<li>Kennedy, J., and Eberhart, R. C. (1995). Particle Swarm
+Optimization, Proc. IEEE International Conference on Neural Networks
+(Perth, Australia), IEEE Service Center, Piscataway, NJ, IV: 1942-1948.</li>
+<li>Kennedy, J. (1997), The Particle Swarm: Social Adaptation of
+Knowledge, Proc. IEEE International Conference on Evolutionary
+Computation (Indianapolis, Indiana), IEEE Service Center, Piscataway,
+NJ, 303-308. </li>
+<li>Koza, J. R. (1992), Genetic Programming: On the Programming of
+Computers by Means of Natural Selection, MIT Press, Cambridge, MA.</li>
+<li>Rechenberg, I. (1994), Evolution Strategy, In Computational
+Intelligence: Imitating Life, J. M. Zurada, R. J. Marks II, and C.
+Robinson, Eds., IEEE Press, Piscataway, NJ.</li>
+<li>Shi, Y. H., Eberhart, R. C., and Chen, Y. B. (1997), Design of
+Evolutionary Fuzzy Expert system, Proc. of 1997 Artificial Neural
+Networks in Engineering Conference, St. Louis, November, 1997.</li>
+<li>Shi, Y. H., Eberhart, R. C., (1998), A Modified Particle Swarm
+Optimizer, IEEE International Conference on Evolutionary Computation,
+Anchorage, Alaska, May 4-9, 1998.</li></ol>
+
+<font size="2"><p> </p>
+</font><p align="center"><img src="ep98_pso_files/image3.gif" height="169" width="322"></p>
+<font size="2"><p align="center">Figure 1 Number of failures vs. inertia weights. Vmax=2</p>
+</font><p align="center"><img src="ep98_pso_files/image2.gif" height="153" width="292"></p>
+<font size="2"></font><p align="center"><font size="2">Figure 2 Number of failures vs. inertia weights. Vmax=3</font></p>
+<p align="center"><font size="2">Table 1 Numbers of iterations for finding the global optimum using different</font></p>
+<p align="center"><font size="2">inertia weights. The blank cells mean these runs didn’t find the global</font></p>
+<p align="center"><font size="2">optimum within the maximum number of generations (4000). Vmax=3</font></p>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="496">
+<tbody><tr><td valign="top" width="14%">
+<p> </p></td>
+<td colspan="8" valign="top" width="86%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Weights</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">No.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">1.4</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1.2</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1.1</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.9</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.8</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.7</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3957</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2772</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1202</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">564</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">664</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">91</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2430</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">75</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3238</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">444</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">623</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">841</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">144</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">100</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1968</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">857</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2784</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">641</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">96</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">594</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">600</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3580</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">707</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">463</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">139</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">68</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2846</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1587</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">680</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">243</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1815</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1223</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">910</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">248</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1330</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">668</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3321</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2940</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">859</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">820</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">132</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2380</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2747</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2392</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">625</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">982</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1799</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2145</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1021</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">630</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">144</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">217</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">104</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3582</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1375</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2415</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">657</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">162</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">779</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1081</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">65</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2450</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2515</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1278</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1272</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">123</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">113</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">99</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3413</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2232</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1597</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1649</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1454</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3843</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">762</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1647</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">769</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">200</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1282</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1912</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2792</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">617</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">178</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">672</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">472</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3493</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">373</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">198</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">429</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2044</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">937</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">59</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">391</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">126</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">394</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">67</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1653</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1257</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2217</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">359</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">276</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1800</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3943</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2709</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">286</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1577</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">87</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">961</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1183</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">381</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">136</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">506</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">395</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">710</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">134</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">103</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2723</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1586</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2897</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1280</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">294</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">242</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2941</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">489</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1620</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">100</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">187</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1876</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2356</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2763</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2095</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">226</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">111</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">415</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2497</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1832</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">241</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">73</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">90</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3315</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2747</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">281</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">370</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">982</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">133</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">848</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3266</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">750</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">911</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">496</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">182</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1549</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">345</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1081</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">805</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1454</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">93</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3383</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3292</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">198</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1934</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">677</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">84</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2728</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2336</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">627</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">124</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">756</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">187</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">145</font></p></td>
+<td valign="top" width="10%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Aver.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2387</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1840</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1758</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1653</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">738</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">438</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">402</font></p></td>
+<td valign="top" width="10%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">663</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<font size="2"><p align="center">Table 2 Numbers of iterations for finding the global optimum using</p>
+<p align="center">different inertia weights. Vmax=4</p></font>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="470">
+<tbody><tr><td valign="top" width="11%">
+<p> </p></td>
+<td colspan="8" valign="top" width="90%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Weights</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">No.</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1.2</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1.1</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.9</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.8</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.7</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.6</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3387</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2676</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1880</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">437</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">209</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">175</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">339</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1068</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">928</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1657</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">322</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">130</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3433</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1540</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">734</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">489</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1188</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">135</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">126</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">732</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">811</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">298</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3295</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">61</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1187</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">808</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">115</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">218</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">147</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">69</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2341</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3046</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">575</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">811</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">93</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1193</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2676</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">288</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1063</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1392</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">104</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3406</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3499</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">645</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">387</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1605</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">64</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">319</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">515</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">92</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">107</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1722</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1178</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3349</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3971</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3597</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1513</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">371</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2029</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1871</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1195</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">143</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">135</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">328</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1059</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">861</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">489</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">344</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">804</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">339</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1029</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">730</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">526</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">136</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">315</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2689</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3225</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1193</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">566</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">770</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">292</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3056</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">492</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">285</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1035</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">230</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3408</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">788</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">995</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">452</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">353</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">750</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1676</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1895</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">242</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">88</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">214</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">61</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">757</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1058</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1551</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2850</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1178</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">499</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">136</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">92</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1589</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2417</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">718</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">328</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">104</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">727</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3547</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2705</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2008</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">364</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">107</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">390</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">52</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">771</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">266</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">925</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">324</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2993</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1558</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">247</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">771</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">317</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2544</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3170</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">947</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">207</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">252</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">171</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2132</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2640</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">240</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">132</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">100</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">66</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">854</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2120</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">395</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2274</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">158</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">85</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">639</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">834</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">777</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1303</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">551</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">176</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">138</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">564</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">530</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">145</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">44</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1162</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2379</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">655</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">422</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1870</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">887</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2214</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1042</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1241</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">82</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">575</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1602</font></p></td>
+</tr>
+<tr><td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Aver.</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2215</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2128</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1967</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">946</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">439</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">471</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">421</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">652</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<font size="2"><p align="center">Table 3 Numbers of iterations for finding the global</p>
+<p align="center">optimum using different inertia weights. Vmax=5</p></font>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="359">
+<tbody><tr><td valign="top" width="14%">
+<p></p></td>
+<td colspan="6" valign="top" width="86%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">weights</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">No.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">1.0</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.9</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.8</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.7</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.6</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2553</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">353</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">136</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">409</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">285</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">180</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1939</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">554</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">168</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">225</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3867</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">700</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">450</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">126</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">398</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">93</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2143</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1806</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">316</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">111</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">476</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">191</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1967</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">354</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">864</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1348</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">544</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1327</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">486</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">620</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">467</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">438</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">116</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1940</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1724</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">676</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">270</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">550</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">467</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">315</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">235</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">162</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1601</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1464</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1448</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">80</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2148</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2841</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">639</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">471</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">290</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">53</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">375</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2545</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">502</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">302</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">188</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">326</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">495</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">548</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1459</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">138</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2578</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">244</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">262</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3711</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">864</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">268</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1752</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">300</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2148</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">231</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">655</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">69</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1612</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">925</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2073</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">191</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">129</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">84</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2921</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1262</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">166</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">79</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">324</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2602</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3065</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">841</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">189</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2255</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1168</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3717</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">458</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">173</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">775</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">92</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">174</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3656</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1004</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">145</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">122</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1665</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">564</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">757</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">302</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">296</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1383</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1695</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">824</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">137</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">349</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">485</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">941</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">297</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">62</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">342</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2416</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1450</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">193</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1015</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3608</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">587</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">380</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">96</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1450</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1311</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">729</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">155</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">75</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">340</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3384</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">836</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">361</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2262</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">907</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1858</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">223</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">121</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">558</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">122</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3285</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">711</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">240</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">223</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">172</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">aver.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2456</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1090</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">366</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">503</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">535</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1133</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<font size="2"><p align="center">Table 4 Numbers of iterations for finding the global</p>
+<p align="center">optimum using different inertia weights. Vmax=10</p></font>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="359">
+<tbody><tr><td valign="top" width="14%">
+<p> </p></td>
+<td colspan="6" valign="top" width="86%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">weights</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">No.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">1.0</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.9</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.8</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.7</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.6</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2464</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1438</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">104</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">61</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1634</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">456</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">129</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">175</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1547</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">133</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">151</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">75</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3855</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">471</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1990</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">538</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">384</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">685</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">305</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3862</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">444</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">310</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">500</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">201</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">190</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2962</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">772</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">194</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">115</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">402</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">183</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">72</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2368</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2517</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2405</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">706</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3034</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">459</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2363</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">193</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">96</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">57</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1107</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">74</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">175</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">285</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">474</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1659</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2474</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">340</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">409</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">265</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1477</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">249</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1257</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">317</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2205</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">510</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2851</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">756</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2743</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">79</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1356</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">541</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">386</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">409</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2178</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1782</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">682</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">253</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">61</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1147</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">608</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1151</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3015</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">186</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1881</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">125</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">330</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">166</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">617</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">277</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1864</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">76</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">239</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">584</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1307</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">348</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">453</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">74</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">244</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">958</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">475</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">450</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">237</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1283</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1138</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">475</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1464</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">269</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2508</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1928</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">195</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">359</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">121</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1210</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3179</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">633</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">172</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">939</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">278</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1368</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">377</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">497</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">96</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">147</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">308</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">104</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">470</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1093</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2431</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">143</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">137</font></p></td>
+<td valign="top" width="14%">
+<p> </p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">152</font></p></td>
+</tr>
+<tr><td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">aver.</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">658</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2027</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">460</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">789</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">490</font></p></td>
+<td valign="top" width="14%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">895</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<font size="2"><p align="center"> </p>
+<p align="center">Table 5 Numbers of iterations for finding the global optimum</p>
+<p align="center">using different inertia weights. Vmax=Xmax</p></font>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="388">
+<tbody><tr><td valign="top" width="13%">
+<p> </p></td>
+<td colspan="7" valign="top" width="87%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">weights</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">No.</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p><font face="Arial" size="1">0.9</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.8</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.7</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.6</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.5</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0.4</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">0</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1336</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2442</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">729</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1022</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">263</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">309</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">426</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">78</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1616</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2078</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">272</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">378</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">307</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">144</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1163</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">345</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2135</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">106</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">384</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">433</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3749</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">755</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">90</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">224</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">896</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">165</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3774</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">50</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">166</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">710</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">617</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">335</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">947</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1326</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2982</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">534</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">163</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1075</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1727</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">173</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1393</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1029</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">236</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">39</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">798</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">455</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">456</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2278</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">352</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1807</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1434</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">139</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">49</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">719</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1322</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">790</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">256</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">594</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1113</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2000</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1295</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">358</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">843</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">220</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">248</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">513</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">898</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">512</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">365</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">264</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">90</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">608</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">261</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1010</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">263</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">453</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">67</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1055</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">924</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">91</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1221</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">299</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1778</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1075</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">101</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">339</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1174</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">153</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">447</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1455</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">148</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">144</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">650</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">64</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2945</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1030</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">563</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">136</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1454</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3468</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">471</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">735</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">124</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1160</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">326</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1869</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">112</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">610</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">346</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">238</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1779</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">230</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">228</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">96</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3212</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">360</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">185</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">83</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">94</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">337</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">498</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">240</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2535</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">69</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">1091</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">3915</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">143</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">99</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">816</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">2071</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">166</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">80</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">154</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">506</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">398</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">253</font></p></td>
+<td valign="top" width="13%">
+<p> </p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">678</font></p></td>
+</tr>
+<tr><td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">aver.</font></p></td>
+<td valign="top" width="11%">
+<p> </p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">974</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">879</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">927</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">430</font></p></td>
+<td valign="top" width="11%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">290</font></p></td>
+<td valign="top" width="13%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">933</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<font size="2"><p align="center">Table 6 Numbers of iterations for finding the global optimum using time</p>
+<p align="center">varying inertia weights. Vmax=Xmax</p></font>
+<p align="center"></p><center><table border="1" cellpadding="2" cellspacing="1" width="489">
+<tbody><tr><td valign="top" width="17%">
+<p align="center"><font face="Arial" size="1">Index</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Iterations</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Index</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Iterations</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Index</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Iterations</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">1</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">423</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">11</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">429</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">21</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">407</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">2</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">231</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">12</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">398</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">22</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">309</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">3</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">317</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">13</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">427</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">23</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">305</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">4</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">373</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">14</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">362</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">24</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">421</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">5</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">321</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">15</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">338</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">25</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">394</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">6</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">226</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">16</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">510</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">26</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">243</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">7</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">250</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">17</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">373</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">27</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">337</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">8</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">241</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">18</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">302</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">28</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">208</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">9</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">293</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">19</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">402</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">29</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">378</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">10</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">284</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">20</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">461</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">30</font></p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">359</font></p></td>
+</tr>
+<tr><td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="center"><font face="Arial" size="1">Average</font></p></td>
+<td valign="top" width="17%">
+<p> </p></td>
+<td valign="top" width="17%">
+<p> </p></td>
+<td valign="top" width="17%">
+<p> </p></td>
+<td valign="top" width="17%">
+<p> </p></td>
+<td valign="top" width="17%">
+<font face="Arial" size="1"></font><p align="right"><font face="Arial" size="1">344</font></p></td>
+</tr>
+</tbody></table>
+</center><p></p>
+
+<p align="center"> </p>
+<p align="center"><img src="ep98_pso_files/image5.gif" height="162" width="307"></p>
+<font size="2"><p align="center">Figure 3 Number of failures vs. inertia weights. Vmax=4</p>
+<p align="center"> </p>
+</font><p align="center"><img src="ep98_pso_files/image4.gif" height="149" width="285"></p>
+<font size="2"><p align="center">Figure 4 Number of failures vs. inertia weights. Vmax=5</p>
+</font><p align="center"><img src="ep98_pso_files/image7.gif" height="169" width="322"></p>
+<font size="2"><p align="center">Figure 5 Number of failures vs. inertia weights. Vmax=10</p>
+</font><p align="center"><img src="ep98_pso_files/image6.gif" height="151" width="288"></p>
+<font size="2"><p align="center">Figure 6 Number of failures vs. inertia weights. Vmax=Xmax</p>
+</font></body></html>
