@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="javadoc">
+<target name="javadoc">
+<javadoc access="private" author="true" classpath="." destdir="doc" doctitle="JSwarm-PSO" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="net.sourceforge.jswarm_pso.example_2,net.sourceforge.jswarm_pso,net.sourceforge.jswarm_pso.example_1" source="1.5" sourcepath="src" splitindex="true" use="true" version="true"/>
+</target>
+</project>
