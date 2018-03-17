@@ -3,7 +3,7 @@ public class Heuristic {
 	static int[] weights;
 	static int weightCounter;
 
-	public static int evaluate(State s) {
+	public static int evaluate(TempState s) {
 		weightCounter = 0;
 		readWeights();
 		int[][] field = s.getField();
@@ -21,8 +21,8 @@ public class Heuristic {
 				+ wMaxColHeight(colHeights) + wNumHoles(field, colHeights);
 	}
 
-	 // TODO: read from file instead
-	 private static void readWeights() {
+	// TODO: read from file instead
+	private static void readWeights() {
 		weights = new int[NUM_FEATURES];
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = 1;
