@@ -1,4 +1,4 @@
-import jswarm_pso.FitnessFunction;
+import net.sourceforge.jswarm_pso.FitnessFunction;
 
 public class TFitnessFunction extends FitnessFunction {
 	public double evaluate(double position[]) {
