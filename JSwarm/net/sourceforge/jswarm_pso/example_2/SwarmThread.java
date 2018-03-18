@@ -1,4 +1,4 @@
-package net.sourceforge.jswarm_pso.example_2;
+package  JSwarm.net.sourceforge.jswarm_pso.example_2;
 
 /**
  * A thread that runs in background while calculating kohonen's learning algorithm

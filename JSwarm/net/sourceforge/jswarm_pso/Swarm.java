@@ -1,4 +1,4 @@
-package net.sourceforge.jswarm_pso;
+package  JSwarm.net.sourceforge.jswarm_pso;
 
 import java.awt.Color;
 import java.awt.Graphics;

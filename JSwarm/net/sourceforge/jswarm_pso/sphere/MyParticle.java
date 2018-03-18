@@ -1,10 +1,10 @@
-package net.sourceforge.jswarm_pso.sphere;
+package  JSwarm.net.sourceforge.jswarm_pso.sphere;
 
-import net.sourceforge.jswarm_pso.Particle;
+import  JSwarm.net.sourceforge.jswarm_pso.Particle;
 
 /**
  * Simple particle 
- * @author Álvaro Jaramillo Duque <aduque@inescporto.pt>
+ * @author ï¿½lvaro Jaramillo Duque <aduque@inescporto.pt>
  */
 public class MyParticle extends Particle {
 

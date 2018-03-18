@@ -1,12 +1,12 @@
-package net.sourceforge.jswarm_pso.alpine;
+package  JSwarm.net.sourceforge.jswarm_pso.alpine;
 
-import net.sourceforge.jswarm_pso.SwarmRepulsive;
+import  JSwarm.net.sourceforge.jswarm_pso.SwarmRepulsive;
 /**
  * Maximize Alpine function,  http://clerc.maurice.free.fr/pso/Alpine/Alpine_Function.htm
  * 	
  * 		f( x1 , x2 ) = sin( x2 ) * sin( x2 ) * Sqrt( x1 * x2 )
  * 	
- * @author Álvaro Jaramillo Duque <aduque@inescporto.pt>
+ * @author ï¿½lvaro Jaramillo Duque <aduque@inescporto.pt>
  */
 public class ExampleRepulsive {
 

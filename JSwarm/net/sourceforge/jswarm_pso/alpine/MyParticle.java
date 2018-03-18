@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.alpine;
+package  JSwarm.net.sourceforge.jswarm_pso.alpine;
 
-import net.sourceforge.jswarm_pso.Particle;
+import  JSwarm.net.sourceforge.jswarm_pso.Particle;
 
 /**
  * Simple particle 

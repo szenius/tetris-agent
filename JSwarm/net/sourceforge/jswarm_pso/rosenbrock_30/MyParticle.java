@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.rosenbrock_30;
+package JSwarm.net.sourceforge.jswarm_pso.rosenbrock_30;
 
-import net.sourceforge.jswarm_pso.Particle;
+import JSwarm.net.sourceforge.jswarm_pso.Particle;
 
 /**
  * Simple particle 

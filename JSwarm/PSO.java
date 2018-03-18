@@ -1,4 +1,6 @@
-import net.sourceforge.jswarm_pso.Swarm;
+package JSwarm;
+
+import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 public class PSO {
 	public static void getOptimalWeights() {

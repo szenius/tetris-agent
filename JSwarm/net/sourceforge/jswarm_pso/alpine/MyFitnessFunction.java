@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.alpine;
+package  JSwarm.net.sourceforge.jswarm_pso.alpine;
 
-import net.sourceforge.jswarm_pso.FitnessFunction;
+import  JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
 
 /**
  * Maximize Alpine function,  http://clerc.maurice.free.fr/pso/Alpine/Alpine_Function.htm
