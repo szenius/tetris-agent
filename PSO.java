@@ -1,5 +1,3 @@
-package JSwarm;
-
 import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 public class PSO {
