@@ -31,7 +31,7 @@ public class PlayerSkeleton {
 				continue;
 			} 
 			//Step 2
-			int score = Heuristic.evaluate(ts);
+			int score = HeuristicNew.evaluate(ts);
 
 			//Step 3
 			if(score > bestScore) {
