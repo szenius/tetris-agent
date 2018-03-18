@@ -1,35 +1,39 @@
 public class HeuristicNew {
 	public static final int NUM_FEATURES = 6;
-	static int[] weights;
+	static double[] weights;
 	static int weightCounter;
 
-	public static int evaluate(TempState s) {
+	public static double evaluate(TempState s, double[] inputWeights) {
 		weightCounter = 0;
 		readWeights();
 		int[][] field = s.getField();
 
-        System.out.println("============================");
-        // print field
-         for (int i = 0; i < field.length; i++) {
-         	for (int j = 0; j < field[0].length; j++) {
-         		System.out.print(field[i][j] + " ");
-         	}
-         	System.out.println();
-         }
-        System.out.println();
-        wellSums(field);
-        System.out.println("============================");
-
-		//return s.getRowsCleared() + wSumColHeight(colHeights) + wSumColDiff(colHeights)
-		//		+ wMaxColHeight(colHeights) + wNumHoles(field, colHeights);
+        if (inputWeights == null) {
+            weights = getDefaultWeights();
+        } else {
+            weights = inputWeights;
+        }
 
         int[] colHeights = colHeights(field);
         return weightedLandingHeight(s) + weightedRowsEliminated(s.getRowsCleared()) + weightedNumRowTranstions(field) + weightedNumColTranstions(field)
                 + wNumHoles(field, colHeights) + weightedWellSums(field);
 	}
 
+    public static double evaluate(TempState s) {
+        return evaluate(s, getDefaultWeights());
+    }
+
+    // TODO: either remove or read from file
+    private static double[] getDefaultWeights() {
+        weights = new double[NUM_FEATURES];
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] = 1;
+        }
+        return weights;
+    }
+
 	// TODO: This method
-    private static int weightedLandingHeight (TempState s) {
+    private static double weightedLandingHeight (TempState s) {
 	    return getNextWeight() * landingHeight(s);
     }
 
@@ -47,19 +51,19 @@ public class HeuristicNew {
     }
 
 
-    private static int weightedRowsEliminated (int rowsCleared) {
+    private static double weightedRowsEliminated (int rowsCleared) {
 	    return getNextWeight() * rowsCleared;
     }
 
     // TODO: read from file instead
 	private static void readWeights() {
-		weights = new int[NUM_FEATURES];
+		weights = new double[NUM_FEATURES];
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = 1;
 		}
 	}
 
-    private static int weightedNumRowTranstions(int[][] field) {
+    private static double weightedNumRowTranstions(int[][] field) {
         return getNextWeight() * numRowTransitions(field);
     }
 
@@ -81,7 +85,7 @@ public class HeuristicNew {
         return count;
     }
 
-    private static int weightedNumColTranstions(int[][] field) {
+    private static double weightedNumColTranstions(int[][] field) {
         return getNextWeight() * numColTransitions(field);
     }
 
@@ -103,7 +107,7 @@ public class HeuristicNew {
         return count;
     }
 
-    private static int weightedWellSums(int[][] field) {
+    private static double weightedWellSums(int[][] field) {
         return getNextWeight() * numColTransitions(field);
     }
 
@@ -228,7 +232,7 @@ public class HeuristicNew {
 	}
 
     // Returns weighted number of holes
-    private static int wNumHoles(int[][] field, int[] colHeights) {
+    private static double wNumHoles(int[][] field, int[] colHeights) {
         int numHoles = 0;
 
         for (int col = 0; col < colHeights.length; col++) {
@@ -244,7 +248,7 @@ public class HeuristicNew {
         return getNextWeight() * numHoles;
     }
 
-	private static int getNextWeight() {
+	private static double getNextWeight() {
 		return weights[weightCounter++];
 	}
 }
