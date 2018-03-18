@@ -22,7 +22,7 @@ public class PlayerSkeleton {
 		//Step 1. Apply each move (action) to get the change field (board configuration).
 		//Step 2. Apply Heuristic.evaluate(s) to get the heuristic score from the move.
 		//Step 3. Get the best move.
-		double bestScore = 0;
+		double bestScore = Double.NEGATIVE_INFINITY;
 		int bestMove = 0;
 
 		for(int i=0; i<legalMoves.length; i++) {
@@ -35,6 +35,7 @@ public class PlayerSkeleton {
 				continue;
 			} 
 			//Step 2
+			ts.putOrientAndSlot(orient, slot);
 			double score = HeuristicNew.evaluate(ts, weights);
 
 			//Step 3

@@ -32,41 +32,40 @@ public class HeuristicNew {
         return weights;
     }
 
-	// TODO: This method
+    // TODO: read from file instead
+    private static void readWeights() {
+        weights = new double[NUM_FEATURES];
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] = 1;
+        }
+    }
+
     private static double weightedLandingHeight (TempState s) {
 	    return getNextWeight() * landingHeight(s);
     }
 
-    // TODO: This method
+    // Feature 1
     // Landing Height:
-    // The height where the piece is put =
-    // the height of the column + (the height of the piece / 2)
+    // The height where the piece is put = the height of the column BEFORE piece is put + (the height of the piece / 2)
+    // Also equivalent to height of column AFTER piece is put - (the height of the piece / 2) (?)
     private static int landingHeight(TempState s) {
 
-	    int heightColumn = 0;
-	    int heightPiece = 0;
-	    int landingHeight = heightColumn + heightPiece / 2;
+	    int heightPiece = s.getHeightOfPeice();
+	    int landingHeight = s.getHeightOfCol(s.getStateSlot()) - heightPiece/2;
 
 	    return landingHeight;
     }
 
-
+    // Feature 2
     private static double weightedRowsEliminated (int rowsCleared) {
 	    return getNextWeight() * rowsCleared;
     }
-
-    // TODO: read from file instead
-	private static void readWeights() {
-		weights = new double[NUM_FEATURES];
-		for (int i = 0; i < weights.length; i++) {
-			weights[i] = 1;
-		}
-	}
 
     private static double weightedNumRowTranstions(int[][] field) {
         return getNextWeight() * numRowTransitions(field);
     }
 
+    // Feature 3
     // The total number of row transitions.
     // A row transition occurs when an empty cell is adjacent to a filled cell
     // on the same row and vice versa.
@@ -89,6 +88,7 @@ public class HeuristicNew {
         return getNextWeight() * numColTransitions(field);
     }
 
+    // Feature 4
     // The total number of column transitions.
     // A column transition occurs when an empty cell is adjacent to a filled cell
     // on the same column and vice versa.
@@ -107,6 +107,45 @@ public class HeuristicNew {
         return count;
     }
 
+    // Returns array of column heights
+    private static int[] colHeights(int[][] field) {
+        int[] colHeights = new int[field[0].length];
+
+        // System.out.print("Col heights: ");
+
+        for (int col = 0; col < field[0].length; col++) {
+            int row = field.length - 1;
+
+            while (row >= 0 && field[row][col] == 0) {
+                row--;
+            }
+            colHeights[col] = row + 1;
+            // System.out.print(colHeights[col] + " ");
+        }
+        // System.out.println();
+
+        return colHeights;
+    }
+
+    // Feature 5
+    // Returns weighted number of holes
+    private static double wNumHoles(int[][] field, int[] colHeights) {
+        int numHoles = 0;
+
+        for (int col = 0; col < colHeights.length; col++) {
+            for (int row = colHeights[col] - 1; row >= 0; row--) {
+                if (field[row][col] == 0) {
+                    numHoles++;
+                }
+            }
+        }
+
+        // System.out.println("Number of holes = " + numHoles);
+
+        return getNextWeight() * numHoles;
+    }
+
+    // Feature 6
     private static double weightedWellSums(int[][] field) {
         return getNextWeight() * numColTransitions(field);
     }
@@ -209,43 +248,6 @@ public class HeuristicNew {
         }
         //System.out.println("Right Well sum: " + count);
         return count;
-    }
-
-    // Returns array of column heights
-	private static int[] colHeights(int[][] field) {
-		int[] colHeights = new int[field[0].length];
-
-		// System.out.print("Col heights: ");
-
-		for (int col = 0; col < field[0].length; col++) {
-			int row = field.length - 1;
-
-			while (row >= 0 && field[row][col] == 0) {
-				row--;
-			}
-			colHeights[col] = row + 1;
-			// System.out.print(colHeights[col] + " ");
-		}
-		// System.out.println();
-
-		return colHeights;
-	}
-
-    // Returns weighted number of holes
-    private static double wNumHoles(int[][] field, int[] colHeights) {
-        int numHoles = 0;
-
-        for (int col = 0; col < colHeights.length; col++) {
-            for (int row = colHeights[col] - 1; row >= 0; row--) {
-                if (field[row][col] == 0) {
-                    numHoles++;
-                }
-            }
-        }
-
-        // System.out.println("Number of holes = " + numHoles);
-
-        return getNextWeight() * numHoles;
     }
 
 	private static double getNextWeight() {

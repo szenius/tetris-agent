@@ -13,6 +13,8 @@ public class TempState extends State{
 	private int cleared;
 	private int nextPiece;
 	private int thisRoundCleared;
+	private int stateOrient;
+	private int stateSlot;
 
 	public TempState(State s) {
 		this.pBottom = s.getpBottom();
@@ -33,13 +35,21 @@ public class TempState extends State{
 		return cleared;
 	}
 
-	public int getRowsClearedThisRound() {
-		return thisRoundCleared;
-	}
+	public int getStateSlot () {
+	    return stateSlot;
+    }
+
+    public int getHeightOfPeice() {
+	    return pHeight[nextPiece][stateOrient];
+    }
+
+    public int getHeightOfCol(int slot) {
+	    return top[slot];
+    }
 
 	//returns false if you lose - true otherwise
 	public boolean makeMove(int orient, int slot) {
-		//height if the first column makes contact
+        //height if the first column makes contact
 		int height = top[slot]-pBottom[nextPiece][orient][0];
 		//for each column beyond the first in the piece
 		for(int c = 1; c < pWidth[nextPiece][orient];c++) {
@@ -102,6 +112,11 @@ public class TempState extends State{
 
 		return true;
 	}
+
+	public void putOrientAndSlot(int orient, int slot){
+	    this.stateOrient = orient;
+	    this.stateSlot = slot;
+    }
 
 	/**
 	* This method makes a copy of an int array.
