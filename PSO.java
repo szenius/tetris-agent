@@ -10,7 +10,7 @@ public class PSO {
 		swarm.setMaxPosition(10);
 		swarm.setMinPosition(-10);
 		// Optimize a few times
-		for( int i = 0; i < 20; i++ ) swarm.evolve();
+		for( int i = 0; i < 100; i++ ) swarm.evolve();
 		// Print en results
 		System.out.println(swarm.toStringStats());
 	}
