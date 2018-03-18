@@ -2,8 +2,12 @@ public class PlayerSkeleton {
 
 	//implement this function to have a working system
 	public int pickMove(State s, int[][] legalMoves) {
+		return pickMove(s, legalMoves, null);
+	}
+
+	public int pickMove(State s, int[][] legalMoves, double[] weights) {
 		//Test all possible moves of the piece on the board and choose the move with the best heuristic score 
-		int best = tryPossibleMoves(s, legalMoves);
+		int best = tryPossibleMoves(s, legalMoves, weights);
 
 		return best;
 	}
@@ -13,12 +17,12 @@ public class PlayerSkeleton {
 	* @param s (current state), legalMoves (possible moves for current piece)
 	* @return move with best (highest) heuristic score
 	**/
-	private int tryPossibleMoves(State s, int[][] legalMoves) {
+	private int tryPossibleMoves(State s, int[][] legalMoves, double[] weights) {
 		//legalMoves = all possible moves of the current piece.
 		//Step 1. Apply each move (action) to get the change field (board configuration).
 		//Step 2. Apply Heuristic.evaluate(s) to get the heuristic score from the move.
 		//Step 3. Get the best move.
-		int bestScore = 0;
+		double bestScore = 0;
 		int bestMove = 0;
 
 		for(int i=0; i<legalMoves.length; i++) {
@@ -31,7 +35,7 @@ public class PlayerSkeleton {
 				continue;
 			} 
 			//Step 2
-			int score = HeuristicNew.evaluate(ts);
+			double score = Heuristic.evaluate(ts, weights);
 
 			//Step 3
 			if(score > bestScore) {

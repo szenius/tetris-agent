@@ -1,32 +1,37 @@
 public class Heuristic {
-	public static final int NUM_FEATURES = 21;
-	static int[] weights;
+	public static final int NUM_FEATURES = 22;
+
+	static double[] weights;
 	static int weightCounter;
 
-	public static int evaluate(TempState s) {
+	public static double evaluate(TempState s, double[] inputWeights) {
 		weightCounter = 0;
-		readWeights();
+
+		if (inputWeights == null) {
+			weights = getDefaultWeights();
+		} else {
+			weights = inputWeights;
+		}
+
 		int[][] field = s.getField();
 
-		// print field
-		// for (int i = 0; i < field.length; i++) {
-		// 	for (int j = 0; j < field[0].length; j++) {
-		// 		System.out.print(field[i][j] + " ");
-		// 	}
-		// 	System.out.println();
-		// }
-
 		int[] colHeights = colHeights(field);
-		return s.getRowsCleared() + wSumColHeight(colHeights) + wSumColDiff(colHeights) 
+
+		return wNumRolesCleared(s.getRowsCleared()) + wSumColHeight(colHeights) + wSumColDiff(colHeights) 
 				+ wMaxColHeight(colHeights) + wNumHoles(field, colHeights);
 	}
 
-	// TODO: read from file instead
-	private static void readWeights() {
-		weights = new int[NUM_FEATURES];
+	public static double evaluate(TempState s) {
+		return evaluate(s, getDefaultWeights());
+	}
+
+	// TODO: either remove or read from file
+	private static double[] getDefaultWeights() {
+		weights = new double[NUM_FEATURES];
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = 1;
 		}
+		return weights;
 	}
 
 	// Returns array of column heights
@@ -49,9 +54,14 @@ public class Heuristic {
 		return colHeights;
 	}
 
+	// Returns weighted number of rows cleared by playing this move
+	private static double wNumRolesCleared(int rowsCleared) {
+		return getNextWeight() * rowsCleared;
+	}
+
 	// Returns weighted sum of column heights
-	private static int wSumColHeight(int[] colHeights) {
-		int weightedSum = 0;
+	private static double wSumColHeight(int[] colHeights) {
+		double weightedSum = 0;
 
 		// iterate through columns, count height for each col
 		for (int i = 0; i < colHeights.length; i++) {
@@ -62,8 +72,8 @@ public class Heuristic {
 	}
 
 	// Returns weighted sum of absolute differences between adjacent columns
-	private static int wSumColDiff(int[] colHeights) {
-		int weightedSum = 0;
+	private static double wSumColDiff(int[] colHeights) {
+		double weightedSum = 0;
 
 		for (int i = 1; i < colHeights.length; i++) {
 			weightedSum += getNextWeight() * Math.abs(colHeights[i] - colHeights[i-1]);
@@ -72,7 +82,7 @@ public class Heuristic {
 	}
 
 	// Returns weighted max col
-	private static int wMaxColHeight(int[] colHeights) {
+	private static double wMaxColHeight(int[] colHeights) {
 		int max = 0;
 
 		for (int i = 0; i < colHeights.length; i++) {
@@ -87,7 +97,7 @@ public class Heuristic {
 	}
 
 	// Returns weighted number of holes
-	private static int wNumHoles(int[][] field, int[] colHeights) {
+	private static double wNumHoles(int[][] field, int[] colHeights) {
 		int numHoles = 0;
 
 		for (int col = 0; col < colHeights.length; col++) {
@@ -103,7 +113,11 @@ public class Heuristic {
 		return getNextWeight() * numHoles;
 	}
 
-	private static int getNextWeight() {
+	private static double getNextWeight() {
 		return weights[weightCounter++];
+	}
+
+	public static int getNumFeatures() {
+		return NUM_FEATURES;
 	}
 }

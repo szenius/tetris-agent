@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class TempState {
+public class TempState extends State{
 	public static final int COLS = 10;
 	public static final int ROWS = 21;
 
@@ -12,6 +12,7 @@ public class TempState {
 	private int[][][] pTop;
 	private int cleared;
 	private int nextPiece;
+	private int thisRoundCleared;
 
 	public TempState(State s) {
 		this.pBottom = s.getpBottom();
@@ -30,6 +31,10 @@ public class TempState {
 
 	public int getRowsCleared() {
 		return cleared;
+	}
+
+	public int getRowsClearedThisRound() {
+		return thisRoundCleared;
 	}
 
 	//returns false if you lose - true otherwise
@@ -92,6 +97,8 @@ public class TempState {
 				}
 			}
 		}
+
+		thisRoundCleared = rowsCleared;
 
 		return true;
 	}
