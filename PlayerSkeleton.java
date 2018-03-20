@@ -27,6 +27,7 @@ public class PlayerSkeleton {
 
 		for(int i=0; i<legalMoves.length; i++) {
 			TempState ts = new TempState(s);
+			int prevCleared = s.getRowsCleared();
 			//Step 1
 			int orient = legalMoves[i][0];
 			int slot = legalMoves[i][1];
@@ -35,7 +36,8 @@ public class PlayerSkeleton {
 				continue;
 			} 
 			//Step 2
-			ts.putOrientAndSlot(orient, slot);
+            ts.setPrevCleared(prevCleared);
+			ts.setOrientAndSlot(orient, slot);
 			double score = HeuristicNew.evaluate(ts, weights);
 
 			//Step 3

@@ -10,13 +10,13 @@ public class TempState extends State{
 	private int[][] pHeight;
 	private int[][][] pBottom;
 	private int[][][] pTop;
+	private int prevCleared;
 	private int cleared;
 	private int nextPiece;
-	private int thisRoundCleared;
 	private int stateOrient;
 	private int stateSlot;
 
-	public TempState(State s) {
+    public TempState(State s) {
 		this.pBottom = s.getpBottom();
 		this.pTop = s.getpTop();
 		this.pHeight = s.getpHeight();
@@ -34,6 +34,10 @@ public class TempState extends State{
 	public int getRowsCleared() {
 		return cleared;
 	}
+
+	public int getRowsPrevCleared() {
+        return prevCleared;
+    }
 
 	public int getStateSlot () {
 	    return stateSlot;
@@ -108,12 +112,10 @@ public class TempState extends State{
 			}
 		}
 
-		thisRoundCleared = rowsCleared;
-
 		return true;
 	}
 
-	public void putOrientAndSlot(int orient, int slot){
+	public void setOrientAndSlot (int orient, int slot){
 	    this.stateOrient = orient;
 	    this.stateSlot = slot;
     }
@@ -153,13 +155,17 @@ public class TempState extends State{
 	* This method prints current board configuration
 	* @param currentField
 	**/
-	private void printField(int[][] currentField) {
+	public void printField(int[][] currentField) {
 		System.out.println("========Field==============");
 		for(int i=0; i<currentField.length; i++) {
 			for(int j=0; j<currentField[i].length; j++) {
-				System.out.print(currentField[i][j]);
+				System.out.print(currentField[i][j] + "\t");
 			}
 			System.out.println();
 		}
 	}
+
+    public void setPrevCleared (int prevCleared) {
+        this.prevCleared = prevCleared;
+    }
 }

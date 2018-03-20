@@ -1,5 +1,7 @@
 public class HeuristicNew {
 	public static final int NUM_FEATURES = 6;
+	public static final boolean db = true; // set true to turn debug statements on
+    public static final boolean db2 = false; // set true to debug rows eliminated (recommended set db = false)
 	static double[] weights;
 	static int weightCounter;
 
@@ -13,9 +15,10 @@ public class HeuristicNew {
         } else {
             weights = inputWeights;
         }
+        if (db) s.printField(s.getField());
 
         int[] colHeights = colHeights(field);
-        return weightedLandingHeight(s) + weightedRowsEliminated(s.getRowsCleared()) + weightedNumRowTranstions(field) + weightedNumColTranstions(field)
+        return weightedLandingHeight(s) + weightedRowsEliminated(s) + weightedNumRowTranstions(field) + weightedNumColTranstions(field)
                 + wNumHoles(field, colHeights) + weightedWellSums(field);
 	}
 
@@ -53,12 +56,19 @@ public class HeuristicNew {
 	    int heightPiece = s.getHeightOfPeice();
 	    int landingHeight = s.getHeightOfCol(s.getStateSlot()) - heightPiece/2;
 
-	    return landingHeight;
+        if (db) System.out.println("landingHeight: " + landingHeight);
+        return landingHeight;
     }
 
     // Feature 2
-    private static double weightedRowsEliminated (int rowsCleared) {
-	    return getNextWeight() * rowsCleared;
+    private static double weightedRowsEliminated (TempState s) {
+	    int rowsEliminated = s.getRowsCleared() - s.getRowsPrevCleared();
+
+        if (db2 && rowsEliminated > 0) {
+            System.out.println(s.getRowsPrevCleared() +" --> " + s.getRowsCleared());
+            System.out.println("rowsEliminated: " + rowsEliminated);
+        }
+        return getNextWeight() * rowsEliminated;
     }
 
     private static double weightedNumRowTranstions(int[][] field) {
@@ -81,6 +91,7 @@ public class HeuristicNew {
                 }
             }
         }
+        if (db) System.out.println("numRowTranstions: " + count);
         return count;
     }
 
@@ -104,6 +115,7 @@ public class HeuristicNew {
                 }
             }
         }
+        if (db) System.out.println("numColTranstions: " + count);
         return count;
     }
 
@@ -129,6 +141,12 @@ public class HeuristicNew {
 
     // Feature 5
     // Returns weighted number of holes
+    // A hole is an empty cell that has at least one filled cell above it in the same column.
+    // Example
+    // 100
+    // 110
+    // 100
+    // === is still 1 hole!
     private static double wNumHoles(int[][] field, int[] colHeights) {
         int numHoles = 0;
 
@@ -140,21 +158,20 @@ public class HeuristicNew {
             }
         }
 
-        // System.out.println("Number of holes = " + numHoles);
-
+        if (db) System.out.println("numHoles: " + numHoles);
         return getNextWeight() * numHoles;
     }
 
     // Feature 6
     private static double weightedWellSums(int[][] field) {
-        return getNextWeight() * numColTransitions(field);
+        return getNextWeight() * wellSums(field);
     }
 
     // A well is a succession of empty cells such that their left cells and right cells are both filled.
     // Example:
-    // 1101100010
-    // 1101101010
-    // 1101101000
+    // |1101100010|
+    // |1101101010|
+    // |1101101000| | denotes left/right edge border
     // returns 8
     private static int wellSums(int[][] field) {
         int count = 0;
@@ -174,7 +191,8 @@ public class HeuristicNew {
 
             }
         }
-        //System.out.println("Overall Well sum: " + count);
+
+        if (db) System.out.println("Overall Well sum: " + count);
         return count;
     }
 
@@ -199,8 +217,8 @@ public class HeuristicNew {
             //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Normal Well sum: " + count);
-	    return count;
+        //System.out.println("Normal Well sum: " + sumFromOneToN(count));
+	    return sumFromOneToN(count);
     }
 
     // explore up the rows within the column for wells by the left wall
@@ -222,8 +240,8 @@ public class HeuristicNew {
             //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Left Well sum: " + count);
-        return count;
+        //System.out.println("Left Well sum: " + sumFromOneToN(count));
+        return sumFromOneToN(count);
     }
 
     // explore up the rows within the column for wells by the right wall
@@ -246,8 +264,15 @@ public class HeuristicNew {
             //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Right Well sum: " + count);
-        return count;
+        //System.out.println("Right Well sum: " + sumFromOneToN(count));
+        return sumFromOneToN(count);
+    }
+
+    // Given an N returns sum From One to N.
+    // eg: Input N. Ouput 1 + 2 + 3 + 4 + 5.
+    // Uses Sum of AP.
+    private static int sumFromOneToN(int N) {
+	    return (N*(N+1))/2;
     }
 
 	private static double getNextWeight() {
