@@ -1,6 +1,6 @@
 public class HeuristicNew {
 	public static final int NUM_FEATURES = 6;
-	public static final boolean db = true; // set true to turn debug statements on
+	public static final boolean db = false; // set true to turn debug statements on
     public static final boolean db2 = false; // set true to debug rows eliminated (recommended set db = false)
 	static double[] weights;
 	static int weightCounter;
