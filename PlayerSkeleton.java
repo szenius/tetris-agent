@@ -47,21 +47,29 @@ public class PlayerSkeleton {
 		return bestMove;
 	}
 	
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		State s = new State();
 		new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
+		double[] weights = {-0.4944712922445228, 0.14814799954876456, -0.9250354407343329, -1.210228068000284, -0.6363751749245313, -0.3071493143829803,
+				0.4062421734216026, 0.4053785630482645, 0.7203562102658518, 0.6458317403226688, 0.33541924448498417,
+				0.156339060819642, 1.2098194382476808, -0.12143020086913736, 1.5266470763709517, 0.5760539680303807,
+				0.11214199088469634, -0.2072277305271486, 1.2884998585410108, 0.9616177885473564, 0.13438465406024958, 1.1912072595739716};
 		while(!s.hasLost()) {
-			s.makeMove(p.pickMove(s,s.legalMoves()));
+			s.makeMove(p.pickMove(s, s.legalMoves(), weights));
 			s.draw();
 			s.drawNext(0,0);
 			try {
-				Thread.sleep(300);
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		System.out.println("You have completed "+s.getRowsCleared()+" rows.");
+	}*/
+
+	public static void main(String[] args) {
+		Genetic gen = new Genetic();
+		//System.out.println("You have completed "+s.getRowsCleared()+" rows.");
 	}
-	
 }
