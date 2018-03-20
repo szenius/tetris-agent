@@ -18,15 +18,37 @@ public class TFitnessFunction extends FitnessFunction {
 			return cache.get(positionKey);
 		}
 
-		int numRowsCleared = playGame(position);
-		cache.put(positionKey, numRowsCleared);
-		return numRowsCleared;
+		int totalGamesPlayed = 3;
+		int[] arrNumRowsCleared = new int[3];
+		int sumNumRowsCleared = 0;
+		int meanNumRowsCleared;
+		Double standardDeviation = new Double(0);
+		int std = 0;
+		int fitnessValue;
+		for (int i=0; i < totalGamesPlayed; i++){
+			int gameScore = playGame(position, i);
+			arrNumRowsCleared[i] = gameScore;
+			sumNumRowsCleared += gameScore;
+		}
+		meanNumRowsCleared = sumNumRowsCleared/totalGamesPlayed;
+		for (int i=0; i < totalGamesPlayed; i++){
+			double sumSquaredDifferences = 0;
+			sumSquaredDifferences += Math.pow(arrNumRowsCleared[i] - meanNumRowsCleared, 2);
+			standardDeviation = Math.sqrt(sumSquaredDifferences / totalGamesPlayed);
+		}
+		std = standardDeviation.intValue();
+		fitnessValue = meanNumRowsCleared - std;
+		System.out.println("For " + generatePositionKey(position) + " STD " + " : " + std);
+		System.out.println("For " + generatePositionKey(position) + " MEAN " + " : " + meanNumRowsCleared);
+		System.out.println("For " + generatePositionKey(position) + " FITNESS " + " : " + fitnessValue);
+		cache.put(positionKey, fitnessValue);
+		return fitnessValue;
 	}
 
 	// Try to play the game given the combination of weights (given by position)
 	// Output the (average? TODO:) number of rows cleared for this set of weights
 	// TODO: parallel?
-	private int playGame(double[] position) {
+	private int playGame(double[] position, int iteration) {
 		State s = new State();
 		PlayerSkeleton p = new PlayerSkeleton();
 		while(!s.hasLost()) {
@@ -37,7 +59,7 @@ public class TFitnessFunction extends FitnessFunction {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("For " + generatePositionKey(position) + ": " + s.getRowsCleared());
+		System.out.println("For " + generatePositionKey(position) + " iteration " + (iteration+1) +" : " + s.getRowsCleared());
 		return s.getRowsCleared();
 	}
 
