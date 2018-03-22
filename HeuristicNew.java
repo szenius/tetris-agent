@@ -7,9 +7,22 @@ public class HeuristicNew {
     TempState s;
 
     public HeuristicNew(TempState s, double[] inputWeights) {
-        this.weights = inputWeights;
+        if(inputWeights == null) {
+            this.weights = getDefaultWeights();
+        } else {
+            this.weights = inputWeights;
+        }
         this.s = s;
         this.weightCounter = 0;
+    }
+
+    // TODO: either remove or read from file
+    private static double[] getDefaultWeights() {
+        double[] weights = new double[NUM_FEATURES];
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] = 1;
+        }
+        return weights;
     }
 
 	public double evaluate() {
