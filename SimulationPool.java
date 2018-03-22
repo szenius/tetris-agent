@@ -100,7 +100,7 @@ class SimulationPool {
         }
 
         long end  = System.nanoTime();
-        System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
+        // System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
     }
