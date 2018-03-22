@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 class Simulation implements Callable<Integer> {
@@ -23,21 +24,21 @@ class Simulation implements Callable<Integer> {
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
-        TFrame f = new TFrame(s);
         while(!s.hasLost()) {
             s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
-            s.draw();
-            s.drawNext(0,0);
             try {
-                Thread.sleep(300);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        f.dispose(); //close the TFrame window
-
+		System.out.println("For " + generatePositionKey(weightSets) + ": " + s.getRowsCleared());
         return s.getRowsCleared();
 	}
 
+	// Return string version of array of weights as String or key for use in Maps
+	private String generatePositionKey(double[] position) {
+		return Arrays.toString(position);
+	}
 
 }
