@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class PlayerSkeleton {
 
 	//implement this function to have a working system
@@ -8,6 +10,7 @@ public class PlayerSkeleton {
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {
 		//Test all possible moves of the piece on the board and choose the move with the best heuristic score 
 		int best = tryPossibleMoves(s, legalMoves, weights);
+		System.out.println("Picked best move for " + Arrays.toString(weights) + " with score of [" + best + "]");
 
 		return best;
 	}
@@ -38,7 +41,8 @@ public class PlayerSkeleton {
 			//Step 2
             ts.setPrevCleared(prevCleared);
 			ts.setOrientAndSlot(orient, slot);
-			double score = HeuristicNew.evaluate(ts, weights);
+			HeuristicNew heuristic = new HeuristicNew(ts, weights);
+			double score = heuristic.evaluate();
 
 			//Step 3
 			if(score > bestScore) {

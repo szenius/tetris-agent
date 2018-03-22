@@ -10,16 +10,24 @@ import java.util.List;
 class SimulationPool {
 	private int games;
 	private double[][] weightSets;
+    private boolean isGA;
 
     public SimulationPool() {
         this.games = 0;
         this.weightSets = null;
     }
 
-	public SimulationPool(int games, double [][] weightSets) {
+	public SimulationPool(int games, double[][] weightSets) {
 		this.games = games;
         this.weightSets = weightSets;
+        this.isGA = true;
 	}
+
+    public SimulationPool(int games, double[][] weightSets, boolean isGA) {
+        this.games = games;
+        this.weightSets = weightSets;
+        this.isGA = isGA;
+    }
 
     /**
     * This method runs X games simulations and assigns each game (with new chromosome/weight) to a thread. 
@@ -28,7 +36,7 @@ class SimulationPool {
 	public int[] startScheduler() {
 	 	if(games <= 0 && weightSets == null) {  
             System.out.println("Please specify number of games and weights for each game");
-            return null; //Simulation Pool is not initialised correctly.
+            System.exit(-1);
         }
 
         //Gets the number of available processors on computer right now.
@@ -41,7 +49,12 @@ class SimulationPool {
        
        	//For each generation, we run a 1000 games. For each game, we assign a thread.
         for(int i=0; i< games; i++){
-            Simulation game = new Simulation(weightSets[i]);
+            Simulation game;
+            if (isGA) {
+                game = new Simulation(weightSets[i]);
+            } else {
+                game = new Simulation(weightSets[0]);
+            }
             Future<Integer> future = executor.submit(game); //Add Thread to be executed by thread pool
             results.add(future); //For retrieving results from thread.
         }
@@ -70,7 +83,7 @@ class SimulationPool {
         }
 
         long end  = System.nanoTime();
-        System.out.printf("Simulation took %.2g secondsn", (double)(end-start)/1e9);
+        System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
     }

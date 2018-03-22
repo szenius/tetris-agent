@@ -27,7 +27,15 @@ public class TFitnessFunction extends FitnessFunction {
 	// Output the (average? TODO:) number of rows cleared for this set of weights
 	// TODO: parallel?
 	private int playGame(double[] position) {
-		State s = new State();
+		double[][] weightSets = new double[1][position.length];
+
+		for (int i = 0; i < position.length; i++) {
+			weightSets[0][i] = position[i];
+		}
+
+		SimulationPool pool = new SimulationPool(500, weightSets, false);
+		return pool.startScheduler()[0];
+/*		State s = new State();
 		PlayerSkeleton p = new PlayerSkeleton();
 		while(!s.hasLost()) {
 			s.makeMove(p.pickMove(s,s.legalMoves(),position));
@@ -39,6 +47,7 @@ public class TFitnessFunction extends FitnessFunction {
 		}
 		System.out.println("For " + generatePositionKey(position) + ": " + s.getRowsCleared());
 		return s.getRowsCleared();
+*/	
 	}
 
 	// Return string version of position array as key
