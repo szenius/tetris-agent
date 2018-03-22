@@ -2,19 +2,18 @@ public class HeuristicNew {
 	public static final int NUM_FEATURES = 6;
 	public static final boolean db = false; // set true to turn debug statements on
     public static final boolean db2 = false; // set true to debug rows eliminated (recommended set db = false)
-	static double[] weights;
-	static int weightCounter;
+	double[] weights;
+	int weightCounter;
+    TempState s;
 
-	public static double evaluate(TempState s, double[] inputWeights) {
-		weightCounter = 0;
-		readWeights();
+    public HeuristicNew(TempState s, double[] inputWeights) {
+        this.weights = inputWeights;
+        this.s = s;
+        this.weightCounter = 0;
+    }
+
+	public double evaluate() {
 		int[][] field = s.getField();
-
-        if (inputWeights == null) {
-            weights = getDefaultWeights();
-        } else {
-            weights = inputWeights;
-        }
         if (db) s.printField(s.getField());
 
         int[] colHeights = colHeights(field);
@@ -22,28 +21,7 @@ public class HeuristicNew {
                 + wNumHoles(field, colHeights) + weightedWellSums(field);
 	}
 
-    public static double evaluate(TempState s) {
-        return evaluate(s, getDefaultWeights());
-    }
-
-    // TODO: either remove or read from file
-    private static double[] getDefaultWeights() {
-        weights = new double[NUM_FEATURES];
-        for (int i = 0; i < weights.length; i++) {
-            weights[i] = 1;
-        }
-        return weights;
-    }
-
-    // TODO: read from file instead
-    private static void readWeights() {
-        weights = new double[NUM_FEATURES];
-        for (int i = 0; i < weights.length; i++) {
-            weights[i] = 1;
-        }
-    }
-
-    private static double weightedLandingHeight (TempState s) {
+    private double weightedLandingHeight (TempState s) {
 	    return getNextWeight() * landingHeight(s);
     }
 
@@ -51,7 +29,7 @@ public class HeuristicNew {
     // Landing Height:
     // The height where the piece is put = the height of the column BEFORE piece is put + (the height of the piece / 2)
     // Also equivalent to height of column AFTER piece is put - (the height of the piece / 2) (?)
-    private static int landingHeight(TempState s) {
+    private int landingHeight(TempState s) {
 
 	    int heightPiece = s.getHeightOfPeice();
 	    int landingHeight = s.getHeightOfCol(s.getStateSlot()) - heightPiece/2;
@@ -61,7 +39,7 @@ public class HeuristicNew {
     }
 
     // Feature 2
-    private static double weightedRowsEliminated (TempState s) {
+    private double weightedRowsEliminated (TempState s) {
 	    int rowsEliminated = s.getRowsCleared() - s.getRowsPrevCleared();
 
         if (db2 && rowsEliminated > 0) {
@@ -71,7 +49,7 @@ public class HeuristicNew {
         return getNextWeight() * rowsEliminated;
     }
 
-    private static double weightedNumRowTranstions(int[][] field) {
+    private double weightedNumRowTranstions(int[][] field) {
         return getNextWeight() * numRowTransitions(field);
     }
 
@@ -79,7 +57,7 @@ public class HeuristicNew {
     // The total number of row transitions.
     // A row transition occurs when an empty cell is adjacent to a filled cell
     // on the same row and vice versa.
-	private static int numRowTransitions(int[][] field) {
+	private int numRowTransitions(int[][] field) {
 	    int count = 0;
 	    int numRows = field.length;
 	    int numCols = field[0].length;
@@ -95,7 +73,7 @@ public class HeuristicNew {
         return count;
     }
 
-    private static double weightedNumColTranstions(int[][] field) {
+    private double weightedNumColTranstions(int[][] field) {
         return getNextWeight() * numColTransitions(field);
     }
 
@@ -103,7 +81,7 @@ public class HeuristicNew {
     // The total number of column transitions.
     // A column transition occurs when an empty cell is adjacent to a filled cell
     // on the same column and vice versa.
-    private static int numColTransitions(int[][] field) {
+    private int numColTransitions(int[][] field) {
         int count = 0;
         int numRows = field.length;
         int numCols = field[0].length;
@@ -120,7 +98,7 @@ public class HeuristicNew {
     }
 
     // Returns array of column heights
-    private static int[] colHeights(int[][] field) {
+    private int[] colHeights(int[][] field) {
         int[] colHeights = new int[field[0].length];
 
         // System.out.print("Col heights: ");
@@ -147,7 +125,7 @@ public class HeuristicNew {
     // 110
     // 100
     // === is still 1 hole!
-    private static double wNumHoles(int[][] field, int[] colHeights) {
+    private double wNumHoles(int[][] field, int[] colHeights) {
         int numHoles = 0;
 
         for (int col = 0; col < colHeights.length; col++) {
@@ -163,7 +141,7 @@ public class HeuristicNew {
     }
 
     // Feature 6
-    private static double weightedWellSums(int[][] field) {
+    private double weightedWellSums(int[][] field) {
         return getNextWeight() * wellSums(field);
     }
 
@@ -173,7 +151,7 @@ public class HeuristicNew {
     // |1101101010|
     // |1101101000| | denotes left/right edge border
     // returns 8
-    private static int wellSums(int[][] field) {
+    private int wellSums(int[][] field) {
         int count = 0;
         int numRows = field.length;
         int numCols = field[0].length;
@@ -197,7 +175,7 @@ public class HeuristicNew {
     }
 
     // explore up the rows within the column
-    private static int exploreWell(int startRow, int startColumn, int[][] field) {
+    private int exploreWell(int startRow, int startColumn, int[][] field) {
 	    // if this empty column is part of an existing well. Don't bother
 	    if (startRow != 0
                 && field[startRow-1][startColumn] == 0
@@ -222,7 +200,7 @@ public class HeuristicNew {
     }
 
     // explore up the rows within the column for wells by the left wall
-    private static int exploreWellLeftSide(int startRow, int[][] field) {
+    private int exploreWellLeftSide(int startRow, int[][] field) {
         // if this empty column is part of an existing well. Don't bother
         if (startRow != 0
                 && field[startRow-1][0] == 0
@@ -245,7 +223,7 @@ public class HeuristicNew {
     }
 
     // explore up the rows within the column for wells by the right wall
-    private static int exploreWellRightSide(int startRow, int[][] field) {
+    private int exploreWellRightSide(int startRow, int[][] field) {
         int numCols = field[0].length;
 	    // if this empty column is part of an existing well. Don't bother
         if (startRow != 0
@@ -271,11 +249,15 @@ public class HeuristicNew {
     // Given an N returns sum From One to N.
     // eg: Input N. Ouput 1 + 2 + 3 + 4 + 5.
     // Uses Sum of AP.
-    private static int sumFromOneToN(int N) {
+    private int sumFromOneToN(int N) {
 	    return (N*(N+1))/2;
     }
 
-	private static double getNextWeight() {
+	private double getNextWeight() {
 		return weights[weightCounter++];
 	}
+
+    public static int getNumFeatures() {
+        return NUM_FEATURES;
+    }
 }
