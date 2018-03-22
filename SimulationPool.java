@@ -28,7 +28,7 @@ class SimulationPool {
 	public int[] startScheduler() {
 	 	if(games <= 0 && weightSets == null) {  
             System.out.println("Please specify number of games and weights for each game");
-            return; //Simulation Pool is not initialised correctly.
+            return null; //Simulation Pool is not initialised correctly.
         }
 
         //Gets the number of available processors on computer right now.
@@ -63,7 +63,7 @@ class SimulationPool {
         int[] gamesResult = new int[games];
         for(int j=0; j<results.size(); j++) {
             try {
-                gamesResult[j] = results[j].get();
+                gamesResult[j] = results.get(j).get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
