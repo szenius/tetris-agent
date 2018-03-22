@@ -69,9 +69,17 @@ public class PlayerSkeleton {
 		}
 		System.out.println("You have completed "+s.getRowsCleared()+" rows.");
 	}*/
-
+	/*
 	public static void main(String[] args) {
 		Genetic gen = new Genetic();
 		//System.out.println("You have completed "+s.getRowsCleared()+" rows.");
 	}
+	*/
+	public static void main(String[] args) {
+		System.out.println("Started");
+		GeneticAlgo gen = new GeneticAlgo();
+		//System.out.println("You have completed "+s.getRowsCleared()+" rows.");
+		System.out.println("Done");
+	}
+
 }
