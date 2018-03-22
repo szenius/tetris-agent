@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.zzz;
+package  JSwarm.net.sourceforge.jswarm_pso.zzz;
 
-import net.sourceforge.jswarm_pso.Swarm;
+import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 /**
  * Maximize function

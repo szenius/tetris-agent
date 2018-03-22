@@ -1,4 +1,4 @@
-package net.sourceforge.jswarm_pso.example_2;
+package  JSwarm.net.sourceforge.jswarm_pso.example_2;
 
 import java.awt.Color;
 import java.awt.Dimension;

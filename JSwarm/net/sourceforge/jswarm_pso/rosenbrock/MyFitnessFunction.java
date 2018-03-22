@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.rosenbrock;
+package  JSwarm.net.sourceforge.jswarm_pso.rosenbrock;
 
-import net.sourceforge.jswarm_pso.FitnessFunction;
+import  JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
 
 /**
  * Minize Rosenbrock function. http://mathworld.wolfram.com/RosenbrockFunction.html

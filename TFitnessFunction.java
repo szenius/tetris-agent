@@ -1,6 +1,8 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
-import java.util.Arrays.*;
-import java.util.*;
 
 public class TFitnessFunction extends FitnessFunction {
 	// so that we don't run the game for the same combination of weights over and over
@@ -26,12 +28,9 @@ public class TFitnessFunction extends FitnessFunction {
 	// TODO: parallel?
 	private int playGame(double[] position) {
 		State s = new State();
-		new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
 		while(!s.hasLost()) {
 			s.makeMove(p.pickMove(s,s.legalMoves(),position));
-			s.draw();
-			s.drawNext(0,0);
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {

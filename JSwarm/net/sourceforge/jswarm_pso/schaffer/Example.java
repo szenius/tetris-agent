@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.schaffer;
+package  JSwarm.net.sourceforge.jswarm_pso.schaffer;
 
-import net.sourceforge.jswarm_pso.Swarm;
+import  JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 /**
  * An extremely simple swarm optimization example

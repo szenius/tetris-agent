@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.alpine;
+package JSwarm.net.sourceforge.jswarm_pso.alpine;
 
-import net.sourceforge.jswarm_pso.Swarm;
+import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 /**
  * Maximize Alpine function,  http://clerc.maurice.free.fr/pso/Alpine/Alpine_Function.htm

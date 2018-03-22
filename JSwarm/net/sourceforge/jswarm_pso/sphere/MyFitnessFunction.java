@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.sphere;
+package  JSwarm.net.sourceforge.jswarm_pso.sphere;
 
-import net.sourceforge.jswarm_pso.FitnessFunction;
+import  JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
 
 /**
  * Minimize  sphere function

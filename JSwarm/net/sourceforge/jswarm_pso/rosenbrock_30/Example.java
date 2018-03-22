@@ -1,8 +1,8 @@
-package net.sourceforge.jswarm_pso.rosenbrock_30;
+package  JSwarm.net.sourceforge.jswarm_pso.rosenbrock_30;
 
-import net.sourceforge.jswarm_pso.Neighborhood;
-import net.sourceforge.jswarm_pso.Neighborhood1D;
-import net.sourceforge.jswarm_pso.Swarm;
+import  JSwarm.net.sourceforge.jswarm_pso.Neighborhood;
+import  JSwarm.net.sourceforge.jswarm_pso.Neighborhood1D;
+import  JSwarm.net.sourceforge.jswarm_pso.Swarm;
 
 /**
  * Minize Rosenbrock function. http://mathworld.wolfram.com/RosenbrockFunction.html

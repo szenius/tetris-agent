@@ -1,9 +1,9 @@
-package net.sourceforge.jswarm_pso.example_1;
+package  JSwarm.net.sourceforge.jswarm_pso.example_1;
 
-import net.sourceforge.jswarm_pso.Neighborhood;
-import net.sourceforge.jswarm_pso.Neighborhood1D;
-import net.sourceforge.jswarm_pso.Swarm;
-import net.sourceforge.jswarm_pso.example_2.SwarmShow2D;
+import  JSwarm.net.sourceforge.jswarm_pso.Neighborhood;
+import  JSwarm.net.sourceforge.jswarm_pso.Neighborhood1D;
+import  JSwarm.net.sourceforge.jswarm_pso.Swarm;
+import  JSwarm.net.sourceforge.jswarm_pso.example_2.SwarmShow2D;
 
 /**
  * An extremely simple swarm optimization example

@@ -1,6 +1,6 @@
-package net.sourceforge.jswarm_pso.example_1;
+package  JSwarm.net.sourceforge.jswarm_pso.example_1;
 
-import net.sourceforge.jswarm_pso.FitnessFunction;
+import  JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
 
 /**
  * Sample Fitness function
