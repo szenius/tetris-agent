@@ -38,7 +38,7 @@ public class TFitnessFunction extends FitnessFunction {
 	}
 
 	public int[] playBatchGames(double[][] positionSets) {
-		SimulationPool pool = new SimulationPool(positionSets.length, positionSets);
+		SimulationPool pool = new SimulationPool(positionSets.length, positionSets, true, true, 5);
 		return pool.startScheduler();
 	}
 
@@ -62,7 +62,7 @@ public class TFitnessFunction extends FitnessFunction {
 		}
 		int avg = (int) sum / results.length;
 
-		System.out.println(Arrays.toString(position) + " ||| " + avg);
+		// System.out.println(Arrays.toString(position) + " ||| " + avg);
 
 		return avg;
 	}
