@@ -11,7 +11,7 @@ import java.util.Iterator;
  */
 public class Swarm implements Iterable<Particle> {
 
-	public static final boolean EVALUATE_BATCH = false;
+	public static final boolean EVALUATE_BATCH = true;
 
 	public static double DEFAULT_GLOBAL_INCREMENT = 0.9;
 	public static double DEFAULT_INERTIA = 0.95;
