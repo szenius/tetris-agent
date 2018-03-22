@@ -14,10 +14,10 @@ public class Swarm implements Iterable<Particle> {
 	public static final boolean EVALUATE_BATCH = true;
 
 	public static double DEFAULT_GLOBAL_INCREMENT = 0.9;
-	public static double DEFAULT_INERTIA = 0.95;
+	public static double DEFAULT_INERTIA = 0.95; 
 	public static int DEFAULT_NUMBER_OF_PARTICLES = 25;
 	public static double DEFAULT_PARTICLE_INCREMENT = 0.9;
-	public static double VELOCITY_GRAPH_FACTOR = 10.0;
+	public static double VELOCITY_GRAPH_FACTOR = 10.0; 
 
 	/** Best fitness so far (global best) */
 	double bestFitness;
@@ -124,6 +124,8 @@ public class Swarm implements Iterable<Particle> {
 
 			//Update 'best global' position
 			for (int i = 0; i < fits.length; i++) {
+				particles[i].setFitness(fits[i], true);
+
 				if (fitnessFunction.isBetterThan(bestFitness, fits[i])) {
 					bestFitness = fits[i]; // Copy best fitness, index, and position vector
 					bestParticleIndex = i;
@@ -144,7 +146,6 @@ public class Swarm implements Iterable<Particle> {
 			for (int i = 0; i < particles.length; i++) {
 				// Evaluate particle
 				double fit = fitnessFunction.evaluate(particles[i]);
-
 				numberOfEvaliations++; // Update counter
 
 				// Update 'best global' position

@@ -32,7 +32,7 @@ class Simulation implements Callable<Integer> {
 			for (int i = 0; i < numRepetitions; i++) {
 				sum += playGame();
 			}
-			return sum / numRepetitions;
+			return sum/numRepetitions;
 		}
     }
 
