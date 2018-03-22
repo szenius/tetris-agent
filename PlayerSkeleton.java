@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class PlayerSkeleton {
 
 	//implement this function to have a working system
@@ -38,7 +40,8 @@ public class PlayerSkeleton {
 			//Step 2
             ts.setPrevCleared(prevCleared);
 			ts.setOrientAndSlot(orient, slot);
-			double score = HeuristicNew.evaluate(ts, weights);
+			HeuristicNew heuristic = new HeuristicNew(ts, weights);
+			double score = heuristic.evaluate();
 
 			//Step 3
 			if(score > bestScore) {

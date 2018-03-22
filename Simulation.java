@@ -23,19 +23,14 @@ class Simulation implements Callable<Integer> {
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
-        TFrame f = new TFrame(s);
         while(!s.hasLost()) {
             s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
-            s.draw();
-            s.drawNext(0,0);
             try {
-                Thread.sleep(300);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        f.dispose(); //close the TFrame window
-
         return s.getRowsCleared();
 	}
 

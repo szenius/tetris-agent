@@ -24,21 +24,28 @@ public class TFitnessFunction extends FitnessFunction {
 	}
 
 	// Try to play the game given the combination of weights (given by position)
-	// Output the (average? TODO:) number of rows cleared for this set of weights
+	// Output the average number of rows cleared for this set of weights
 	// TODO: parallel?
 	private int playGame(double[] position) {
-		State s = new State();
-		PlayerSkeleton p = new PlayerSkeleton();
-		while(!s.hasLost()) {
-			s.makeMove(p.pickMove(s,s.legalMoves(),position));
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		double[][] weightSets = new double[1][position.length];
+
+		for (int i = 0; i < position.length; i++) {
+			weightSets[0][i] = position[i];
 		}
-		System.out.println("For " + generatePositionKey(position) + ": " + s.getRowsCleared());
-		return s.getRowsCleared();
+
+		SimulationPool pool = new SimulationPool(10, weightSets, false);
+
+		// compute and return average of all results for this set of weights
+		int[] results = pool.startScheduler();
+		int sum = 0;
+		for (int i = 0; i < results.length; i++) {
+			sum += results[i];
+		}
+		int avg = (int) sum / results.length;
+
+		System.out.println(Arrays.toString(position) + " ||| " + avg);
+
+		return avg;
 	}
 
 	// Return string version of position array as key
