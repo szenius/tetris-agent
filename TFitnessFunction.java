@@ -38,7 +38,7 @@ public class TFitnessFunction extends FitnessFunction {
 	}
 
 	public int[] playBatchGames(double[][] positionSets) {
-		SimulationPool pool = new SimulationPool(positionSets.length, positionSets, true, true, 5);
+		SimulationPool pool = new SimulationPool(positionSets.length, positionSets, true, true, 10);
 		return pool.startScheduler();
 	}
 
