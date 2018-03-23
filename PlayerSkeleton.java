@@ -10,7 +10,7 @@ public class PlayerSkeleton {
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {
 		//Test all possible moves of the piece on the board and choose the move with the best heuristic score 
 		int best = tryPossibleMoves(s, legalMoves, weights);
-		
+
 		return best;
 	}
 
@@ -57,6 +57,7 @@ public class PlayerSkeleton {
 		State s = new State();
 		new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
+		// double[] weights = new double[]{-7.98667, -2.92195, -2.24357, -10.0, -10.0, -4.81467};
 		// double[] weights = {-0.4944712922445228, 0.14814799954876456, -0.9250354407343329, -1.210228068000284, -0.6363751749245313, -0.3071493143829803,
 		// 		0.4062421734216026, 0.4053785630482645, 0.7203562102658518, 0.6458317403226688, 0.33541924448498417,
 		// 		0.156339060819642, 1.2098194382476808, -0.12143020086913736, 1.5266470763709517, 0.5760539680303807,
