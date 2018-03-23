@@ -115,52 +115,59 @@ public class Swarm implements Iterable<Particle> {
 			bestParticleIndex = -1;
 		}
 
-		if (EVALUATE_BATCH) {
-			//---
-			// Evaluate batch of particles at the same time
-			//---
-			int[] fits = fitnessFunction.evaluateBatch(particles);
-			numberOfEvaliations += fits.length;
+		try {
 
-			//Update 'best global' position
-			for (int i = 0; i < fits.length; i++) {
-				particles[i].setFitness(fits[i], true);
+			if (EVALUATE_BATCH) {
+				//---
+				// Evaluate batch of particles at the same time
+				//---
+				int[] fits = fitnessFunction.evaluateBatch(particles);
+				numberOfEvaliations += fits.length;
 
-				if (fitnessFunction.isBetterThan(bestFitness, fits[i])) {
-					bestFitness = fits[i]; // Copy best fitness, index, and position vector
-					bestParticleIndex = i;
-					if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
-					particles[bestParticleIndex].copyPosition(bestPosition);
+				//Update 'best global' position
+				for (int i = 0; i < fits.length; i++) {
+					particles[i].setFitness(fits[i], true);
+
+					if (fitnessFunction.isBetterThan(bestFitness, fits[i])) {
+						bestFitness = fits[i]; // Copy best fitness, index, and position vector
+						bestParticleIndex = i;
+						if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
+						particles[bestParticleIndex].copyPosition(bestPosition);
+					}
+
+					// Update 'best neighborhood' 
+					if (neighborhood != null) {
+						neighborhood.update(this, particles[i]);
+					}
 				}
 
-				// Update 'best neighborhood' 
-				if (neighborhood != null) {
-					neighborhood.update(this, particles[i]);
+			} else {
+				//---
+				// Evaluate each particle (and find the 'best' one)
+				//---
+				for (int i = 0; i < particles.length; i++) {
+					// Evaluate particle
+					double fit = fitnessFunction.evaluate(particles[i]);
+					numberOfEvaliations++; // Update counter
+
+					// Update 'best global' position
+					if (fitnessFunction.isBetterThan(bestFitness, fit)) {
+						bestFitness = fit; // Copy best fitness, index, and position vector
+						bestParticleIndex = i;
+						if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
+						particles[bestParticleIndex].copyPosition(bestPosition);
+					}
+
+					// Update 'best neighborhood' 
+					if (neighborhood != null) {
+						neighborhood.update(this, particles[i]);
+					}
 				}
 			}
-
-		} else {
-			//---
-			// Evaluate each particle (and find the 'best' one)
-			//---
-			for (int i = 0; i < particles.length; i++) {
-				// Evaluate particle
-				double fit = fitnessFunction.evaluate(particles[i]);
-				numberOfEvaliations++; // Update counter
-
-				// Update 'best global' position
-				if (fitnessFunction.isBetterThan(bestFitness, fit)) {
-					bestFitness = fit; // Copy best fitness, index, and position vector
-					bestParticleIndex = i;
-					if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
-					particles[bestParticleIndex].copyPosition(bestPosition);
-				}
-
-				// Update 'best neighborhood' 
-				if (neighborhood != null) {
-					neighborhood.update(this, particles[i]);
-				}
-			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Last updated best fitness: " + toStringStats());
+			System.exit(-1);
 		}
 	}
 
