@@ -61,7 +61,7 @@ class SimulationPool {
 
         long start = System.nanoTime();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2); //Threadpool size = ?
+        ExecutorService executor = Executors.newFixedThreadPool(100); //Threadpool size = ?
         List<Future<Integer>> results = new ArrayList<Future<Integer>>();
        
        	//For each generation, we run a 1000 games. For each game, we assign a thread.
