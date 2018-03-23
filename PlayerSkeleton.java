@@ -10,7 +10,7 @@ public class PlayerSkeleton {
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {
 		//Test all possible moves of the piece on the board and choose the move with the best heuristic score 
 		int best = tryPossibleMoves(s, legalMoves, weights);
-
+		
 		return best;
 	}
 
@@ -41,7 +41,7 @@ public class PlayerSkeleton {
             ts.setPrevCleared(prevCleared);
 			ts.setOrientAndSlot(orient, slot);
 			HeuristicNew heuristic = new HeuristicNew(ts, weights);
-			double score = heuristic.evaluate();
+			double score = heuristic.evaluate(); 
 
 			//Step 3
 			if(score > bestScore) {

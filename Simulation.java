@@ -44,7 +44,12 @@ class Simulation implements Callable<Integer> {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
         while(!s.hasLost()) {
-            s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
+        	try {
+            	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
+            } catch (Exception e) {
+            	e.printStackTrace();
+            	return -1;
+            }
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {
