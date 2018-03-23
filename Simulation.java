@@ -2,18 +2,38 @@ import java.util.concurrent.Callable;
 
 class Simulation implements Callable<Integer> {
 	private double[] weightSets;
+	private boolean findAverage;
+	private int numRepetitions;
 
 	public Simulation() {
 		weightSets = null;
+		findAverage = false;
+		numRepetitions = 1;
 	}
 
 	public Simulation(double[] weightSets) {
 		this.weightSets = weightSets;
+		this.findAverage = false;
+		this.numRepetitions = 1;
+	}
+
+	public Simulation(double[] weightSets, boolean findAverage, int numRepetitions) {
+		this.weightSets = weightSets;
+		this.findAverage = findAverage;
+		this.numRepetitions = numRepetitions;
 	}
 
 
 	public Integer call() {
-		return playGame();
+		if (!findAverage) {
+			return playGame();
+		} else {
+			int sum = 0;
+			for (int i = 0; i < numRepetitions; i++) {
+				sum += playGame();
+			}
+			return sum/numRepetitions;
+		}
     }
 
 	/**
@@ -24,7 +44,12 @@ class Simulation implements Callable<Integer> {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
         while(!s.hasLost()) {
-            s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
+        	try {
+            	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
+            } catch (Exception e) {
+            	e.printStackTrace();
+            	return -1;
+            }
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

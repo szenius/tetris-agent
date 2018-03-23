@@ -40,6 +40,15 @@ public abstract class FitnessFunction {
 	public abstract double evaluate(double position[]);
 
 	/**
+	 * Evaluates a batch of particles
+	 * NOTE: You should write your own method!
+	 * 
+	 * @param particles : Current batch of particles
+	 * @return Fitness functions for all particles
+	 */
+	public abstract int[] evaluateBatch(Particle[] particles);
+
+	/**
 	 * Evaluates a particles 
 	 * @param particle : Particle to evaluate
 	 * @return Fitness function for a particle

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Arrays;
 
 /**
  * A swarm of particles
@@ -11,11 +12,13 @@ import java.util.Iterator;
  */
 public class Swarm implements Iterable<Particle> {
 
+	public static final boolean EVALUATE_BATCH = true;
+
 	public static double DEFAULT_GLOBAL_INCREMENT = 0.9;
-	public static double DEFAULT_INERTIA = 0.95;
+	public static double DEFAULT_INERTIA = 0.95; 
 	public static int DEFAULT_NUMBER_OF_PARTICLES = 25;
 	public static double DEFAULT_PARTICLE_INCREMENT = 0.9;
-	public static double VELOCITY_GRAPH_FACTOR = 10.0;
+	public static double VELOCITY_GRAPH_FACTOR = 10.0; 
 
 	/** Best fitness so far (global best) */
 	double bestFitness;
@@ -113,28 +116,59 @@ public class Swarm implements Iterable<Particle> {
 			bestParticleIndex = -1;
 		}
 
-		//---
-		// Evaluate each particle (and find the 'best' one)
-		//---
-		for (int i = 0; i < particles.length; i++) {
-			// Evaluate particle
-			double fit = fitnessFunction.evaluate(particles[i]);
+		try {
 
-			numberOfEvaliations++; // Update counter
+			if (EVALUATE_BATCH) {
+				//---
+				// Evaluate batch of particles at the same time
+				//---
+				int[] fits = fitnessFunction.evaluateBatch(particles);
+				numberOfEvaliations += fits.length;
 
-			// Update 'best global' position
-			if (fitnessFunction.isBetterThan(bestFitness, fit)) {
-				bestFitness = fit; // Copy best fitness, index, and position vector
-				bestParticleIndex = i;
-				if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
-				particles[bestParticleIndex].copyPosition(bestPosition);
+				//Update 'best global' position
+				for (int i = 0; i < fits.length; i++) {
+					particles[i].setFitness(fits[i], true);
+					System.out.println(Arrays.toString(particles[i].getPosition()) + ": " + fits[i]);
+
+					if (fitnessFunction.isBetterThan(bestFitness, fits[i])) {
+						bestFitness = fits[i]; // Copy best fitness, index, and position vector
+						bestParticleIndex = i;
+						if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
+						particles[bestParticleIndex].copyPosition(bestPosition);
+					}
+
+					// Update 'best neighborhood' 
+					if (neighborhood != null) {
+						neighborhood.update(this, particles[i]);
+					}
+				}
+
+			} else {
+				//---
+				// Evaluate each particle (and find the 'best' one)
+				//---
+				for (int i = 0; i < particles.length; i++) {
+					// Evaluate particle
+					double fit = fitnessFunction.evaluate(particles[i]);
+					numberOfEvaliations++; // Update counter
+
+					// Update 'best global' position
+					if (fitnessFunction.isBetterThan(bestFitness, fit)) {
+						bestFitness = fit; // Copy best fitness, index, and position vector
+						bestParticleIndex = i;
+						if (bestPosition == null) bestPosition = new double[sampleParticle.getDimension()];
+						particles[bestParticleIndex].copyPosition(bestPosition);
+					}
+
+					// Update 'best neighborhood' 
+					if (neighborhood != null) {
+						neighborhood.update(this, particles[i]);
+					}
+				}
 			}
-
-			// Update 'best neighborhood' 
-			if (neighborhood != null) {
-				neighborhood.update(this, particles[i]);
-			}
-
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Last updated best fitness: " + toStringStats());
 		}
 	}
 

@@ -3,10 +3,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import JSwarm.net.sourceforge.jswarm_pso.FitnessFunction;
+import JSwarm.net.sourceforge.jswarm_pso.Particle;
 
 public class TFitnessFunction extends FitnessFunction {
 	// so that we don't run the game for the same combination of weights over and over
 	Map<String, Integer> cache = new HashMap<>(); 
+
+	public int[] evaluateBatch(Particle[] particles) {
+		// copy Particle[][] to positionSets[][]
+		double[][] positionSets = new double[particles.length][particles[0].getPosition().length];
+		for (int i = 0; i < particles.length; i++) {
+			double[] position = particles[i].getPosition();
+			for (int j = 0; j < position.length; j++) {
+				positionSets[i][j] = position[j];
+			}
+		}
+
+		return playBatchGames(positionSets);
+	}
 
 	// Returns the score of this particle's position
 	// Particle's position is the combination of weights for the features
@@ -21,6 +35,11 @@ public class TFitnessFunction extends FitnessFunction {
 		int numRowsCleared = playGame(position);
 		cache.put(positionKey, numRowsCleared);
 		return numRowsCleared;
+	}
+
+	public int[] playBatchGames(double[][] positionSets) {
+		SimulationPool pool = new SimulationPool(positionSets.length, positionSets, true, true, 10);
+		return pool.startScheduler();
 	}
 
 	// Try to play the game given the combination of weights (given by position)
@@ -43,7 +62,7 @@ public class TFitnessFunction extends FitnessFunction {
 		}
 		int avg = (int) sum / results.length;
 
-		System.out.println(Arrays.toString(position) + " ||| " + avg);
+		// System.out.println(Arrays.toString(position) + " ||| " + avg);
 
 		return avg;
 	}

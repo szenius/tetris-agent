@@ -10,23 +10,40 @@ import java.util.List;
 class SimulationPool {
 	private int games;
 	private double[][] weightSets;
-    private boolean isGA;
+    private boolean isBatch; // default true
+    private boolean findAverage; // default false
+    private int numRepetitions;
 
     public SimulationPool() {
         this.games = 0;
         this.weightSets = null;
+        this.isBatch = true;
+        this.findAverage = false;
+        this.numRepetitions = 1;
     }
 
 	public SimulationPool(int games, double[][] weightSets) {
 		this.games = games;
         this.weightSets = weightSets;
-        this.isGA = true;
+        this.isBatch = true;
+        this.findAverage = false;
+        this.numRepetitions = 1;
 	}
 
-    public SimulationPool(int games, double[][] weightSets, boolean isGA) {
+    public SimulationPool(int games, double[][] weightSets, boolean isBatch) {
         this.games = games;
         this.weightSets = weightSets;
-        this.isGA = isGA;
+        this.isBatch = isBatch;
+        this.findAverage = false;
+        this.numRepetitions = 1;
+    }
+
+    public SimulationPool(int games, double[][] weightSets, boolean isBatch, boolean findAverage, int numRepetitions) {
+        this.games = games;
+        this.weightSets = weightSets;
+        this.isBatch = isBatch;
+        this.findAverage = findAverage;
+        this.numRepetitions = numRepetitions;
     }
 
     /**
@@ -44,14 +61,14 @@ class SimulationPool {
 
         long start = System.nanoTime();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2); //Threadpool size = ?
+        ExecutorService executor = Executors.newFixedThreadPool(10); //Threadpool size = ?
         List<Future<Integer>> results = new ArrayList<Future<Integer>>();
        
        	//For each generation, we run a 1000 games. For each game, we assign a thread.
         for(int i=0; i< games; i++){
             Simulation game;
-            if (isGA) {
-                game = new Simulation(weightSets[i]);
+            if (isBatch) {
+                game = new Simulation(weightSets[i], findAverage, numRepetitions);
             } else {
                 game = new Simulation(weightSets[0]);
             }
@@ -83,7 +100,7 @@ class SimulationPool {
         }
 
         long end  = System.nanoTime();
-        System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
+        // System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
     }
