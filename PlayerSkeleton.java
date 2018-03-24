@@ -4,6 +4,8 @@ public class PlayerSkeleton {
 
 	//implement this function to have a working system
 	public int pickMove(State s, int[][] legalMoves) {
+		// TODO before submission:
+		// Create a Heuristic object with the chosen features and also input the chosen weights
 		return pickMove(s, legalMoves, null, null);
 	}
 
