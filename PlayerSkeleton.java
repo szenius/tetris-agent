@@ -53,7 +53,8 @@ public class PlayerSkeleton {
 			//Step 2
             ts.setPrevCleared(prevCleared);
 			ts.setOrientAndSlot(orient, slot);
-			double score = h.evaluate(ts, weights); 
+			Evaluator e = new Evaluator(h, ts, weights);
+			double score = e.evaluate(); 
 
 			//Step 3
 			if(score > bestScore) {

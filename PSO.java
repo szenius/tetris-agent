@@ -7,14 +7,15 @@ public class PSO {
 		if (args.length == 2) {
 			h = new Heuristic(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1]));
 		} else if (args.length == 3) {
+			if (args[2].length() != Heuristic.getNumAvailableFeatures()) {
+				System.out.println("There should be " + h.getNumAvailableFeatures() + " bits in total for your third argument.");
+				System.exit(-1);
+			}
 			h = new Heuristic(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1]), args[2]);
 		} else {
 			System.out.println("Wrong number of arguments.");
 			System.exit(-1);
 		}
-
-		System.out.println("Number of features = " + h.getNumFeatures());
-		System.exit(-2);
 		long startTime = System.currentTimeMillis();
 
 		Swarm swarm = new Swarm(200

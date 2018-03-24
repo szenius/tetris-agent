@@ -21,6 +21,8 @@ public abstract class Particle {
 	/** Velocity */
 	double velocity[];
 
+	int dimension;
+
 	//-------------------------------------------------------------------------
 	// Constructors
 	//-------------------------------------------------------------------------
@@ -40,14 +42,14 @@ public abstract class Particle {
 		allocate(dimension);
 	}
 
-	/**
-	 * Constructor 
-	 * @param sampleParticle : A sample particles to copy
-	 */
-	public Particle(Particle sampleParticle) {
-		int dimension = sampleParticle.getDimension();
-		allocate(dimension);
-	}
+	// /**
+	//  * Constructor 
+	//  * @param sampleParticle : A sample particles to copy
+	//  */
+	// public Particle(Particle sampleParticle) {
+	// 	int dimension = sampleParticle.getDimension();
+	// 	allocate(dimension);
+	// }
 
 	//-------------------------------------------------------------------------
 	// Methods
@@ -55,6 +57,7 @@ public abstract class Particle {
 
 	/** Allocate memory */
 	public void allocate(int dimension) {
+		this.dimension = dimension;
 		position = new double[dimension];
 		bestPosition = new double[dimension];
 		velocity = new double[dimension];
@@ -192,7 +195,7 @@ public abstract class Particle {
 		Constructor cons;
 
 		try {
-			cons = cl.getConstructor((Class[]) null);
+			cons = cl.getConstructor(int.class);
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchMethodException e) {
@@ -200,7 +203,7 @@ public abstract class Particle {
 		}
 
 		try {
-			return cons.newInstance((Object[]) null);
+			return cons.newInstance(dimension);
 		} catch (IllegalArgumentException e1) {
 			throw new RuntimeException(e1);
 		} catch (InstantiationException e1) {
