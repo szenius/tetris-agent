@@ -1,3 +1,4 @@
+import java.util.Arrays;
 public class Evaluator {
 	private static final int TOTAL_NUM_FEATURES = 9;
 
@@ -51,7 +52,7 @@ public class Evaluator {
 	/** METHODS TO COMPUTE FEATURE SUM **/
 	// Returns weighted number of rows cleared by playing this move
 	private double weightedNumRowsCleared(int rowsCleared) {
-		if (featureFlags[INDEX_ROWS_CLEARED] == '0') {
+		if (featureFlags[INDEX_ROWS_CLEARED] != '1') {
 			return 0;
 		}
 	    int rowsEliminated = s.getRowsCleared() - s.getRowsPrevCleared();
@@ -60,7 +61,7 @@ public class Evaluator {
 
 	// Returns weighted sum of column heights
 	private double weightedSumColHeight(int[] colHeights) {
-		if (featureFlags[INDEX_COL_HEIGHT] == '0') {
+		if (featureFlags[INDEX_COL_HEIGHT] != '1') {
 			return 0;
 		}
 
@@ -76,7 +77,7 @@ public class Evaluator {
 
 	// Returns weighted sum of absolute differences between adjacent columns
 	private double weightedSumColDiff(int[] colHeights) {
-		if (featureFlags[INDEX_COL_HEIGHT_DIFF] == '0') {
+		if (featureFlags[INDEX_COL_HEIGHT_DIFF] != '1') {
 			return 0;
 		}
 
@@ -90,7 +91,7 @@ public class Evaluator {
 
 	// Returns weighted max col
 	private double weightedMaxColHeight(int[] colHeights) {
-		if (featureFlags[INDEX_MAX_COL_HEIGHT] == '0') {
+		if (featureFlags[INDEX_MAX_COL_HEIGHT] != '1') {
 			return 0;
 		}
 
@@ -107,7 +108,7 @@ public class Evaluator {
 
 	// Returns weighted number of holes
 	private double weightedNumHoles(int[][] field, int[] colHeights) {
-		if (featureFlags[INDEX_NUM_HOLES] == '0') {
+		if (featureFlags[INDEX_NUM_HOLES] != '1') {
 			return 0;
 		}
 
@@ -125,7 +126,7 @@ public class Evaluator {
 	}
 
     private double weightedLandingHeight (TempState s) {
-		if (featureFlags[INDEX_LANDING_HEIGHT] == '0') {
+		if (featureFlags[INDEX_LANDING_HEIGHT] != '1') {
 			return 0;
 		}
 
@@ -144,7 +145,7 @@ public class Evaluator {
     }
 
     private double weightedNumRowTranstions(int[][] field) {
-		if (featureFlags[INDEX_ROW_TRANSITIONS] == '0') {
+		if (featureFlags[INDEX_ROW_TRANSITIONS] != '1') {
 			return 0;
 		}
 
@@ -170,7 +171,7 @@ public class Evaluator {
     }
 
     private double weightedNumColTranstions(int[][] field) {
-		if (featureFlags[INDEX_COL_TRANSITIONS] == '0') {
+		if (featureFlags[INDEX_COL_TRANSITIONS] != '1') {
 			return 0;
 		}
 
@@ -196,7 +197,7 @@ public class Evaluator {
     }
 
     private double weightedWellSums(int[][] field) {
-		if (featureFlags[INDEX_WELL_SUMS] == '0') {
+		if (featureFlags[INDEX_WELL_SUMS] != '1') {
 			return 0;
 		}
 

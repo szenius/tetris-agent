@@ -16,6 +16,7 @@ public class PSO {
 			System.out.println("Wrong number of arguments.");
 			System.exit(-1);
 		}
+
 		long startTime = System.currentTimeMillis();
 
 		Swarm swarm = new Swarm(200
