@@ -24,7 +24,7 @@ public class Heuristic {
 	private TempState s;
 	private int[] colHeights;
 
-    public HeuristicNew(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures) {
+    public Heuristic(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures) {
     	this.weights = inputWeights;
         this.s = s;
         this.weightCounter = 0;
@@ -34,7 +34,7 @@ public class Heuristic {
         setNumFeatures(useOldFeatures, useNewFeatures);
     }
 
- 	public HeuristicNew(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures, String featureBits) {
+ 	public Heuristic(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures, String featureBits) {
         this.weights = inputWeights;
         this.s = s;
         this.weightCounter = 0;
