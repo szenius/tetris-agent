@@ -3,19 +3,15 @@ public class Evaluator {
 	private static final int TOTAL_NUM_FEATURES = 9;
 
 	// Indices for each feature to keep track of which feature to use
-	private static final int INDEX_ROWS_CLEARED = 0;
-	private static final int INDEX_COL_HEIGHT = 1;
-	private static final int INDEX_COL_HEIGHT_DIFF = 2;
-	private static final int INDEX_MAX_COL_HEIGHT = 3;
-	private static final int INDEX_NUM_HOLES = 4;
-	private static final int INDEX_LANDING_HEIGHT = 5;
-	private static final int INDEX_ROW_TRANSITIONS = 6;
-	private static final int INDEX_COL_TRANSITIONS = 7;
-	private static final int INDEX_WELL_SUMS = 8;
-	private static final int[] INDEX_OLD_FEATURES = new int[]{INDEX_ROWS_CLEARED, INDEX_COL_HEIGHT, INDEX_COL_HEIGHT_DIFF,
-		INDEX_MAX_COL_HEIGHT, INDEX_NUM_HOLES};
-	private static final int[] INDEX_NEW_FEATURES = new int[]{INDEX_ROWS_CLEARED, INDEX_NUM_HOLES, INDEX_LANDING_HEIGHT, 
-		INDEX_ROW_TRANSITIONS, INDEX_COL_TRANSITIONS, INDEX_WELL_SUMS};
+	private static final int INDEX_ROWS_CLEARED = Heuristic.INDEX_ROWS_CLEARED;
+	private static final int INDEX_COL_HEIGHT = Heuristic.INDEX_COL_HEIGHT;
+	private static final int INDEX_COL_HEIGHT_DIFF = Heuristic.INDEX_COL_HEIGHT_DIFF;
+	private static final int INDEX_MAX_COL_HEIGHT = Heuristic.INDEX_MAX_COL_HEIGHT;
+	private static final int INDEX_NUM_HOLES = Heuristic.INDEX_NUM_HOLES;
+	private static final int INDEX_LANDING_HEIGHT = Heuristic.INDEX_LANDING_HEIGHT;
+	private static final int INDEX_ROW_TRANSITIONS = Heuristic.INDEX_ROW_TRANSITIONS;
+	private static final int INDEX_COL_TRANSITIONS = Heuristic.INDEX_COL_TRANSITIONS;
+	private static final int INDEX_WELL_SUMS = Heuristic.INDEX_WELL_SUMS;
 
 	// Flags for features
 	private char[] featureFlags;
