@@ -1,11 +1,25 @@
 import JSwarm.net.sourceforge.jswarm_pso.Swarm;
+import java.util.*;
 
 public class PSO {
 	public static void main(String[] args) {
+		Heuristic h = null;
+		if (args.length == 2) {
+			h = new Heuristic(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1]));
+		} else if (args.length == 3) {
+			h = new Heuristic(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1]), args[2]);
+		} else {
+			System.out.println("Wrong number of arguments.");
+			System.exit(-1);
+		}
+
+		System.out.println("Number of features = " + h.getNumFeatures());
+		System.exit(-2);
 		long startTime = System.currentTimeMillis();
+
 		Swarm swarm = new Swarm(200
-				, new TParticle()
-				, new TFitnessFunction());
+				, new TParticle(h.getNumFeatures())
+				, new TFitnessFunction(h));
 		// Set position (and velocity) constraints. 
 		// i.e.: where to look for solutions
 		swarm.setMaxPosition(10);

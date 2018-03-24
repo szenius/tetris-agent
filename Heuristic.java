@@ -24,28 +24,23 @@ public class Heuristic {
 	private TempState s;
 	private int[] colHeights;
 
-    public Heuristic(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures) {
-    	this.weights = inputWeights;
-        this.s = s;
+    public Heuristic(boolean useOldFeatures, boolean useNewFeatures) {
         this.weightCounter = 0;
-        this.colHeights = null;
-        this.numFeatures = null;
         this.featureFlags = new char[TOTAL_NUM_FEATURES];
         setNumFeatures(useOldFeatures, useNewFeatures);
     }
 
- 	public Heuristic(TempState s, double[] inputWeights, boolean useOldFeatures, boolean useNewFeatures, String featureBits) {
-        this.weights = inputWeights;
-        this.s = s;
+ 	public Heuristic(boolean useOldFeatures, boolean useNewFeatures, String featureBits) {
         this.weightCounter = 0;
-        this.colHeights = colHeights(field);
-        this.numFeatures = null;
         this.featureFlags = featureBits.toCharArray();
         setNumFeatures(useOldFeatures, useNewFeatures);
     }
     
-	public double evaluate() {
+	public double evaluate(TempState s, double[] inputWeights) {
+		this.s = s;
+		this.weights = inputWeights;
 		int[][] field = s.getField();
+		this.colHeights = colHeights(field);
 
 		return weightedNumRowsCleared(s.getRowsCleared()) 
 				+ weightedSumColHeight(colHeights) 
@@ -53,10 +48,8 @@ public class Heuristic {
 				+ weightedMaxColHeight(colHeights) 
 				+ weightedNumHoles(field, colHeights) 
 				+ weightedLandingHeight(s) 
-				+ weightedRowsEliminated(s) 
 				+ weightedNumRowTranstions(field) 
 				+ weightedNumColTranstions(field)
-                + wNumHoles(field, colHeights) 
                 + weightedWellSums(field);
 	}
 
@@ -351,10 +344,7 @@ public class Heuristic {
 		setFixedFeatures(INDEX_NEW_FEATURES, useNewFeatures);
 		setFixedFeatures(INDEX_OLD_FEATURES, useNewFeatures);
 
-		// Count number of feature flags set to '1'
-		if (numFeatures == null) {
-			numFeatures = 0;
-		}
+		numFeatures = 0;
 		for (int i = 0; i < featureFlags.length; i++) {
 			if (featureFlags[i] == '1') {
 				numFeatures++;
@@ -363,6 +353,6 @@ public class Heuristic {
 	}
 
 	public int getNumFeatures() {
-		return NUM_FEATURES;
+		return numFeatures;
 	}
 }
