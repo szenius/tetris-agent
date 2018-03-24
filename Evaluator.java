@@ -33,7 +33,7 @@ public class Evaluator {
 		int[][] field = s.getField();
 		this.colHeights = colHeights(field);
 
-		return weightedNumRowsCleared(s.getRowsCleared()) 
+		return weightedNumRowsCleared() 
 				+ weightedSumColHeight(colHeights) 
 				+ weightedSumColDiff(colHeights) 
 				+ weightedMaxColHeight(colHeights) 
@@ -47,7 +47,7 @@ public class Evaluator {
 
 	/** METHODS TO COMPUTE FEATURE SUM **/
 	// Returns weighted number of rows cleared by playing this move
-	private double weightedNumRowsCleared(int rowsCleared) {
+	private double weightedNumRowsCleared() {
 		if (featureFlags[INDEX_ROWS_CLEARED] != '1') {
 			return 0;
 		}
