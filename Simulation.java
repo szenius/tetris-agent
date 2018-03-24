@@ -1,4 +1,5 @@
 import java.util.concurrent.Callable;
+import java.util.Arrays;
 
 class Simulation implements Callable<Integer> {
 	private double[] weightSets;
@@ -28,11 +29,21 @@ class Simulation implements Callable<Integer> {
 		if (!findAverage) {
 			return playGame();
 		} else {
-			int sum = 0;
-			for (int i = 0; i < numRepetitions; i++) {
-				sum += playGame();
+			double[] results = new double[numRepetitions];
+			double sum = 0;
+			for (int i = 0; i < numRepetitions; i++) { // compute sum
+				results[i] = playGame();
+				sum += results[i];
 			}
-			return sum/numRepetitions;
+			double mean =  sum / numRepetitions;
+			double sumSqDiff = 0;
+			for (int i = 0; i < numRepetitions; i++) { // compute std dev
+				sumSqDiff += Math.pow((results[i] - mean), 2);
+			}
+			double score = sum / Math.sqrt(sumSqDiff); // compute final score (= sum / std dev)
+			System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
+				"Results: " + Arrays.toString(results) + " = " + (int) score);
+			return (int) score;
 		}
     }
 
