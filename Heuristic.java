@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Heuristic {
 	private static final int TOTAL_NUM_FEATURES = 9;
 
@@ -65,6 +67,10 @@ public class Heuristic {
 
 	public char[] getFeatureFlags() {
 		return featureFlags;
+	}
+
+	public String printFeatureInfo() {
+		return "Feature set used: " + Arrays.toString(featureFlags);
 	}
 
 	public static int getNumAvailableFeatures() {
