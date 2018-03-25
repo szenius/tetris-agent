@@ -1,30 +1,41 @@
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.ArrayList;
 
 class GABasic {
-	private static final int POPULATION_SIZE = 10; //population size per generation
-    private static final int NUM_WEIGHTS = 6; //weights equaivalent to feature
+    private static final int POPULATION_SIZE = 200; //population size per generation
+    private static final int NUM_WEIGHTS = 6; //weights equivalent to feature
     private static final int WEIGHT_RANGE = 10;
-    private static final int GAME_SIZE = 3;
+    private static final int GA_XGamesPerWeight = 10;
     private static final Random RNG = new Random();
-    private static final double BREED_RATE = 0.2;
-    private static final double MUTATION_RATE = 0.02;
+    private static final ArrayList<Integer> randomPool = new ArrayList<Integer>();
+    private static final double SAMPLE_SIZE = 0.1;
+    private static final double BREED_RATE = 0.3;
+    private static final double ELITE_RATE = 0.65;
+    private static final double MUTATION_RATE = 0.05; 
     private static final double ALLOWABLE_VARIANCE_LIMIT = 1.0;
-
+    
     private double[][] weightSet = new double[POPULATION_SIZE][NUM_WEIGHTS];
-
+    
+    private Heuristic heuristic;
     private EvaluationResult highscoreweights;
     private int highscore = 0;
     private int generation = 0;
+    
+    private Logger LOGGER = Logging.getInstance();
 
-	public GABasic() {
-		for(int i=0; i<POPULATION_SIZE; i++) {
-			weightSet[i] = generateWeights();
-		}
-	}
+    public GABasic() {
+        this.heuristic = new Heuristic(false, true);
+        for(int i=0; i<POPULATION_SIZE; i++) {
+            randomPool.add(i);
+            weightSet[i] = generateWeights();
+        }
+    }
 
-	//Generate random weights for a game
+    //Generate random weights for a game
     private double[] generateWeights() {
         double[] weights = new double[NUM_WEIGHTS];
         for (int i=0; i<NUM_WEIGHTS; i++) {
@@ -38,52 +49,41 @@ class GABasic {
     }
 
     private void runGeneration() {
-    	runGeneration(this.weightSet);
+        runGeneration(this.weightSet);
     }
 
     //Run one generation
     private void runGeneration(double[][] weights) {
-        EvaluationResult[] evaluations = new EvaluationResult[POPULATION_SIZE];
-        int score;
-        int game1, game2, game3;
-        for (int i = 0; i < POPULATION_SIZE; i++) {
-            game1 = playGame(weights[i]);
-            game2 = playGame(weights[i]);
-            game3 = playGame(weights[i]);
-            int[] gameScores  = {game1, game2, game3};
-            score = calculateSdScore(gameScores);
-            evaluations[i] = new EvaluationResult(weights[i], score);
-        }
-        double variance = calculateVariance(evaluations);
-        if (variance <= ALLOWABLE_VARIANCE_LIMIT) {
-            printBestScorer(evaluations, true);
-        } else {
-            printBestScorer(evaluations, true);
-            runGeneration(breedWeights(evaluations));
-        }
-    }
+        try {
+            EvaluationResult[] evaluations = new EvaluationResult[POPULATION_SIZE];
+            
+            SimulationPool sp = new SimulationPool(heuristic, POPULATION_SIZE, weights, GA_XGamesPerWeight);
+            evaluations = sp.startGAScheduler(evaluations);
 
-    public int playGame(double[] weightSets) {
-        PlayerSkeleton p = new PlayerSkeleton();
-        State s = new State();
-        while(!s.hasLost()) {
-            s.makeMove(p.pickMove(s, s.legalMoves(), weightSets));
+            double variance = calculateVariance(evaluations);
+            if (variance <= ALLOWABLE_VARIANCE_LIMIT) {
+                printBestScorer(evaluations, true);
+            } else {
+                printBestScorer(evaluations, true);
+                runGeneration(breedWeights(evaluations));
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "an exception was thrown", e);
         }
-        return s.getRowsCleared();
     }
 
     /*
     private void printWeights(double[][] results) {
-    	for(int i=0; i<POPULATION_SIZE; i++) {
-    		for(int j=0; j<NUM_WEIGHTS; j++) {
-    			System.out.print(results[i][j] + " ");
-    		}
-    		System.out.println();
-    	}
+        for(int i=0; i<POPULATION_SIZE; i++) {
+            for(int j=0; j<NUM_WEIGHTS; j++) {
+                System.out.print(results[i][j] + " ");
+            }
+            System.out.println();
+        }
     }*/
 
-	//calculate variance of all weights
-	private double calculateVariance(EvaluationResult[] resultSet) {
+    //calculate variance of all weights
+    private double calculateVariance(EvaluationResult[] resultSet) {
         double s1 = 0;
         double s2 = 0;
         double sum;
@@ -100,33 +100,19 @@ class GABasic {
         return variance;
     }
 
-    //calculate SD for weights
-    private int calculateSdScore(int[] gameScore) {
-        double s1 = 0;
-        double s2 = 0;
-        double sum;
-        for (int i = 0; i < GAME_SIZE; i++) {
-            s1 += gameScore[i];
-        }
-        double mean = s1 / (double) GAME_SIZE;
-        for (int i = 0; i < GAME_SIZE; i++) {
-            sum = gameScore[i] - mean;
-            s2 += sum*sum;
-        }
-
-        double variance = s2 / (double) (GAME_SIZE - 1);
-        return (int) (mean - Math.sqrt(variance));
-    }
-
     //Prints the score
     private void printBestScorer(EvaluationResult[] results, boolean doPrintFull) {
         Collections.sort(Arrays.asList(results));
-        System.out.println("Generation " + generation);
+        //System.out.println("Generation " + generation);
+        LOGGER.info("Generation " + generation + " has highest score of : " + highscore);
+        LOGGER.info("==================================================================");
         if (results[POPULATION_SIZE - 1].rowsCleared > highscore) {
             for (int i = 0; i < NUM_WEIGHTS; i++) {
-                System.out.println("Feature " + i + " :" + results[POPULATION_SIZE - 1].getWeightSets()[i] + " ");
+                //System.out.println("Feature " + i + " :" + results[POPULATION_SIZE - 1].getWeightSets()[i] + " ");
+                LOGGER.info("Feature " + i + " :" + results[POPULATION_SIZE - 1].getWeightSets()[i] + " ");
             }
-            System.out.println("\nBest score: " + results[POPULATION_SIZE-1].rowsCleared);
+            //System.out.println("\nBest score: " + results[POPULATION_SIZE-1].rowsCleared);
+            LOGGER.info("\nBest score: " + results[POPULATION_SIZE-1].rowsCleared);
             highscore = results[POPULATION_SIZE - 1].rowsCleared;
             highscoreweights = results[POPULATION_SIZE - 1];
         }
@@ -136,46 +122,74 @@ class GABasic {
     //Breed the two weights by choosing random weights to splice
     private double[][] breedWeights(EvaluationResult[] evaluationResults) {
         double[][] result = new double[POPULATION_SIZE][NUM_WEIGHTS];
-        //Sort the evaluation result by rows cleared
-        Collections.sort(Arrays.asList(evaluationResults));
         
-        //Breed the top 20% best performing of the population. 
-        for (int i=0; i<POPULATION_SIZE * BREED_RATE; i+=2) {
-            int j = RNG.nextInt(NUM_WEIGHTS); //0-5
+        //Step 1. Select a random sample of 10% of population (Tournament Selection)
+        //Step 2. Take the best 2 and crossover.
+        //Repeat until we have 30% of the population. 
+        for(int i=0; i<POPULATION_SIZE * BREED_RATE; i++) {
+            
+            //Step 1
+            Collections.shuffle(randomPool);
+            int p1 = -1;
+            int p2 = -1;
+            for(int j=0; j<POPULATION_SIZE * SAMPLE_SIZE; j++) {
+                int selected = randomPool.get(j);
+                
+                if (p1 < 0) {
+                    p1 = selected;
+                    continue;
+                }
+                if (p2 < 0) {
+                    p2 = selected;
+                    continue;
+                }
+                
+                if (evaluationResults[selected].rowsCleared > evaluationResults[p1].rowsCleared 
+                    && evaluationResults[selected].rowsCleared > evaluationResults[p2].rowsCleared) {
+                    p2 = p1;
+                    p1 = selected;
+                } else if (evaluationResults[selected].rowsCleared > evaluationResults[p2].rowsCleared) {
+                    p2 = selected;
+                }
+            }
+            
+            //Step 2
+            int j = RNG.nextInt(NUM_WEIGHTS); //0-5 crossover point
             //randomly select index. eg. 2 
-           	// P1 = [0,1,2,3,4,5] , P2 = [A,B,C,D,E,F]
+            // P1 = [0,1,2,3,4,5] , P2 = [A,B,C,D,E,F]
             // C1 = [0,1,C,D,E,5] , C2 = [A,B,2,3,4,F]
-
+            
             int k = 0;
             int half = NUM_WEIGHTS / 2;
             while(k < NUM_WEIGHTS) {
-            	j %= NUM_WEIGHTS;
-            	
-            	if(k < half) {
-            		result[i][j] = evaluationResults[i].getWeightSets()[j]; //Child 1 get from Parent 1
-            		result[i+1][j] = evaluationResults[i+1].getWeightSets()[j]; //Child 2 get from Parent 2
-            	} else {
-            		result[i][j] = evaluationResults[i+1].getWeightSets()[j]; //Child 1 get from Parent 2
-            		result[i+1][j] = evaluationResults[i].getWeightSets()[j]; //Child 2 get from Parent 1
-           	 	}
-           	 	j++;
-            	k++;
+                j %= NUM_WEIGHTS;
+                
+                if (k < half) {
+                    result[i][j] = evaluationResults[p1].getWeightSets()[j]; //Child get from Parent 1
+                } else {
+                    result[i][j] = evaluationResults[p2].getWeightSets()[j]; //Child get from Parent 2
+                }
+                j++;
+                k++;
             }
         }
+        
+        //Sort the evaluation result by rows cleared
+        Collections.sort(Arrays.asList(evaluationResults));
 
-        //Fill up the rest of the population (t+1) with 80% of the original population (t)
+        //Fill up the rest of the population (t+1) with 65% of the original population (t) --> Elitism
         int u = 0;
         for (int v = (int)(POPULATION_SIZE * BREED_RATE); v<POPULATION_SIZE; v++) {
             for(int w=0; w<NUM_WEIGHTS; w++) {
-            	result[v][w] = evaluationResults[u].getWeightSets()[w];
+                result[v][w] = evaluationResults[u].getWeightSets()[w];
             }
             u++;
         }
 
-        //Randomly choose 0.02% of population and mutate them.
-        int mutates = (int)(POPULATION_SIZE * MUTATION_RATE);
-        for(int m=0; m<mutates; m++) {
-        	result[m] = mutateWeights(result[m]);
+        //Randomly choose 5% of population and mutate them to create the last 5% of the population.
+        for(int m = (int)(POPULATION_SIZE * (BREED_RATE+ELITE_RATE)); m<POPULATION_SIZE; m++) {
+            int n = RNG.nextInt(POPULATION_SIZE);
+            result[m] = mutateWeights(result[n]);
         }
 
         return result;
@@ -183,15 +197,13 @@ class GABasic {
 
     // Mutate a random weight by a random double from -1 to 1 at MUTATION_RATE chance
     private double[] mutateWeights(double[] weights) {
-         if (RNG.nextDouble() < MUTATION_RATE) {
-             weights[RNG.nextInt(NUM_WEIGHTS)] += ((RNG.nextDouble() * 2) - 1);
-         }
-         return weights;
+        weights[RNG.nextInt(NUM_WEIGHTS)] += ((RNG.nextDouble() * 2) - 1);
+        return weights;
     }
 
-	public static void main(String[] args) {
-		//Pre-processing: Generate random weights for population (t)
-		GABasic GA = new GABasic();
-		GA.runGeneration();
-	}
+    public static void main(String[] args) {
+        //Pre-processing: Generate random weights for population (t)
+        GABasic GA = new GABasic();
+        GA.runGeneration();
+    }
 }
