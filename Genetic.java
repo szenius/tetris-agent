@@ -15,7 +15,7 @@ public class Genetic {
     public static final int WEIGHT_RANGE = 5;
     public static final int SAMPLE_SIZE = 400;
     public static final int GAME_SIZE = 10;
-    public static final double ALLOWABLE_VARIANCE_LIMIT = 1.0;
+    public static final double ALLOWABLE_VARIANCE_LIMIT = 20.0;
     public static final double CUT_OFF = 0.25;
     public static final double CHILDREN_TO_BREED = 8;
     private static final Random RNG = new Random();
@@ -124,8 +124,9 @@ public class Genetic {
         int counter = 0;
         Collections.sort(Arrays.asList(evaluations));
         int startingIndex = (int) (CUT_OFF * SAMPLE_SIZE);
-        for (int i = startingIndex; i < SAMPLE_SIZE - 1; i += 2) {
+        for (int i = SAMPLE_SIZE - startingIndex - 1; i < SAMPLE_SIZE - 1; i += 2) {
             for (int j = 0; j < CHILDREN_TO_BREED; j++) {
+                //System.out.println(counter + j);
                 weightSets[counter + j] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
             }
             counter += CHILDREN_TO_BREED;
