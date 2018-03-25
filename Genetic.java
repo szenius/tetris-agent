@@ -1,14 +1,20 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Genetic {
-    public static final int NUM_FEATURES = 22;
+    public static final int NUM_FEATURES = 6;
     public static final int INDEX_MID = 10;
     public static final int INDEX_VARIANCE = 4;
     public static final int WEIGHT_RANGE = 5;
     public static final int SAMPLE_SIZE = 400;
-    public static final int GAME_SIZE = 3;
+    public static final int GAME_SIZE = 10;
     public static final double ALLOWABLE_VARIANCE_LIMIT = 1.0;
     public static final double CUT_OFF = 0.5;
     private static final Random RNG = new Random();
@@ -17,6 +23,8 @@ public class Genetic {
     private EvaluationResult bestSet;
     private int bestScore = 0;
     private int cycle = 0;
+    private long timeStart;
+    private long timeEnd;
 
     // TODO read heuristic from file, store them for use, then breed.
     public Genetic(String filename) {
@@ -85,16 +93,21 @@ public class Genetic {
     public void runGeneration(double[][] weightSets) {
         EvaluationResult[] evaluations = new EvaluationResult[SAMPLE_SIZE];
         int score;
-        int game1, game2, game3;
+        int[] gameScores = new int[GAME_SIZE];
+        timeStart = System.currentTimeMillis();
+        ExecutorService executor = Executors.newFixedThreadPool(GAME_SIZE); //Threadpool size = ?
         for (int i = 0; i < SAMPLE_SIZE; i++) {
-            game1 = playGame(weightSets[i]);
-            game2 = playGame(weightSets[i]);
-            game3 = playGame(weightSets[i]);
-            int[] gameScores  = {game1, game2, game3};
-            score = calculateSdScore(gameScores);
+            ArrayList<Future<Integer>> results = new ArrayList<Future<Integer>>();
+            Simulation game = new Simulation(weightSets[i]);
+            for (int j = 0; j < GAME_SIZE; j++) {
+                Future<Integer> future = executor.submit(game); //Add Thread to be executed by thread pool
+                results.add(future);
+            }
+            score = calculateSdScore(results);
             evaluations[i] = new EvaluationResult(weightSets[i], score);
         }
         double variance = calculateVariance(evaluations);
+        timeEnd = System.currentTimeMillis();
         if (variance <= ALLOWABLE_VARIANCE_LIMIT) {
             printBestScorer(evaluations, true);
         } else {
@@ -133,9 +146,9 @@ public class Genetic {
         System.out.println("Cycle " + cycle);
         if (results[SAMPLE_SIZE - 1].rowsCleared > bestScore) {
             for (int i = 0; i < NUM_FEATURES; i++) {
-                System.out.print("Feature " + i + " :" + results[SAMPLE_SIZE - 1].getWeightSets()[i] + " ");
+                System.out.print(results[SAMPLE_SIZE - 1].getWeightSets()[i] + ", ");
             }
-            System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared);
+            System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + (timeEnd - timeStart));
             bestScore = results[SAMPLE_SIZE - 1].rowsCleared;
             bestSet = results[SAMPLE_SIZE - 1];
         }
@@ -157,20 +170,31 @@ public class Genetic {
         }
 
         double variance = s2 / (double) (SAMPLE_SIZE - 1);
+        System.out.println(variance);
         return variance;
     }
 
-    private int calculateSdScore(int[] gameScore) {
+    private int calculateSdScore(ArrayList<Future<Integer>> gameScore) {
         double s1 = 0;
         double s2 = 0;
         double sum;
-        for (int i = 0; i < GAME_SIZE; i++) {
-            s1 += gameScore[i];
+        try {
+            for (int i = 0; i < GAME_SIZE; i++) {
+                s1 += gameScore.get(i).get();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+
         double mean = s1 / (double) GAME_SIZE;
-        for (int i = 0; i < GAME_SIZE; i++) {
-            sum = gameScore[i] - mean;
-            s2 += sum*sum;
+
+        try {
+            for (int i = 0; i < GAME_SIZE; i++) {
+                sum = gameScore.get(i).get() - mean;
+                s2 += sum*sum;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
 
         double variance = s2 / (double) (GAME_SIZE - 1);
