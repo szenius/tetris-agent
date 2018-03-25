@@ -8,17 +8,16 @@ public class PlayerSkeleton {
 		// Create a Heuristic object with the chosen features and also input the chosen weights
 
 		// e.g. for old feature set:
-		// return pickMove(s, legalMoves, new double[]{-10.0, 3.1866102280509017, -10.0, 
-		// 	-2.6166250910102162, 10.0, 9.079192461274538, -10.0, -10.0, -3.5319369732970207, 
-		// 	-1.3557653061908144, -1.2930516421214744, 8.937515278308917, -10.0, 9.695111692980946, 
-		// 	-10.0, -8.04781332965197, -10.0, -10.0, -10.0, -6.576121188396466, -9.577979914066237, 
-		// 	-10.0}, new Heuristic(true, false));
+		// return pickMove(s, legalMoves, new double[]{1.2833875706457385, -1.3177491117863123, 2.406380632946737, 
+		// 	-6.409626812577342, -10.0, -10.0, -1.6042204302840832, -10.0, -10.0, -0.10680704480852654, 7.583569921869946, 
+		// 	-1.4479169546185844, 3.012421751232105, 1.9260563707132148, -7.002885893784303, 10.0, 10.0, -10.0, -10.0, 
+		// 	7.320092035545837, -1.6795947290151112, -10.0}, new Heuristic(true, false));
 
 		// e.g. for new feature set:
-		// return pickMove(s, legalMoves, new double[]{5.549082691824574, 4.2301207149571525, 
-		// 	-10.0, -4.8941246823863676, -10.0, -10.0}, new Heuristic(false, true));
+		// return pickMove(s, legalMoves, new double[]{10.0, -10.0, -7.631455394594079, 2.1425255943282537, 0.19485158741367403, 
+		// 	-4.781899234177633}, new Heuristic(false, true));
 		
-    return pickMove(s, legalMoves, null, null);
+    	return pickMove(s, legalMoves, null, null);
 	}
 
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {
