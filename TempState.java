@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class TempState extends State{
-	public static final int COLS = 10; //Change to 8 col instead of 10 COL
+	public static final int COLS = 10;
 	public static final int ROWS = 21;
 
 	private int[] top;
@@ -25,7 +25,6 @@ public class TempState extends State{
 		this.nextPiece = s.getNextPiece();
 		this.top = copyArray(s.getTop());
 		this.field = copyArray(s.getField());
-		//this.field = shrinkField(s.getField()); //Change to 8 col instead of 10 COL
 	}
 
 	public int[][] getField() {
@@ -148,23 +147,6 @@ public class TempState extends State{
 		int[][] newArray = new int[originalArray.length][];
 		for(int i=0; i<originalArray.length; i++) {
 			newArray[i] = Arrays.copyOf(originalArray[i], originalArray[i].length);
-		}
-		return newArray;
-	}
-
-	/**
-	* This method makes a copy of the field from 10 COL to 8 COL
-	* @param originalArray (array to copy)
-	* @return newArray (deep copy of the array)
-	**/
-	private int[][] shrinkField(int[][] originalArray) {
-		if(originalArray == null) {
-			return null;
-		}
-
-		int[][] newArray = new int[originalArray.length][];
-		for(int i=0; i<originalArray.length; i++) {
-			newArray[i] = Arrays.copyOfRange(originalArray[i], 0, originalArray[i].length-2);
 		}
 		return newArray;
 	}

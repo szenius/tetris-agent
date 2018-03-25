@@ -44,8 +44,8 @@ class Simulation implements Callable<Integer> {
 			sumSqDiff += Math.pow((results[i] - mean), 2);
 		}
 		double score = sum / Math.sqrt(sumSqDiff / numRepetitions) * 1000; // compute final score (= sum / std dev * 1000)
-		//System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
-			//"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
+		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
+			"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
 		//LOGGER.info("Weights: " + Arrays.toString(weightSets) + "\n" +
 		//	"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
 		return (int) score;
@@ -58,15 +58,9 @@ class Simulation implements Callable<Integer> {
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
-        //generateLegalMoves(s);
-        //TFrame f = new TFrame(s);
         while(!s.hasLost()) {
         	try {
             	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets, h));
-            	//int bestMove = p.pickMove(s, legalMovesFor8Col[s.getNextPiece()], weightSets, h);
-            	//s.makeMove(legalMovesFor8Col[s.getNextPiece()][bestMove]);
-            	//s.draw();
-            	//s.drawNext(0, 0);
             } catch (Exception e) {
             	e.printStackTrace();
             	LOGGER.log(Level.SEVERE, "an exception was thrown" , e);
@@ -79,38 +73,7 @@ class Simulation implements Callable<Integer> {
                 LOGGER.log(Level.SEVERE, "an exception was thrown" , e);
             }
         }
-        //f.dispose();
         return s.getRowsCleared();
-	}
-
-	public void generateLegalMoves(State s) {
-		int orient = 0;
-		int slot = 1;
-		int col = 8;
-		int[][] pWidth = s.getpWidth();
-		int[] pOrients = s.getpOrients();
-
-		//for each piece type
-		for(int i = 0; i < 7; i++) {
-			//figure number of legal moves
-			int n = 0;
-			for(int j = 0; j < pOrients[i]; j++) {
-				//number of locations in this orientation
-				n += col+1-pWidth[i][j];
-			}
-			//allocate space
-			legalMovesFor8Col[i] = new int[n][2];
-			//for each orientation
-			n = 0;
-			for(int j = 0; j < pOrients[i]; j++) {
-				//for each slot
-				for(int k = 0; k < col+1-pWidth[i][j];k++) {
-					legalMovesFor8Col[i][n][orient] = j;
-					legalMovesFor8Col[i][n][slot] = k;
-					n++;
-				}
-			}
-		}
 	}
 
 }

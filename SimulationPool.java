@@ -59,7 +59,7 @@ class SimulationPool {
         //Gets the number of available processors on computer right now.
         int processors = Runtime.getRuntime().availableProcessors();
 
-        long start = System.nanoTime();
+        //long start = System.nanoTime();
 
         ExecutorService executor = Executors.newFixedThreadPool(2); //Threadpool size = ?
         List<Future<Integer>> results = new ArrayList<Future<Integer>>();
@@ -96,7 +96,7 @@ class SimulationPool {
             }
         }
 
-        long end  = System.nanoTime();
+        //long end  = System.nanoTime();
         // System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
