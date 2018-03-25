@@ -6,18 +6,6 @@ public class PlayerSkeleton {
 	public int pickMove(State s, int[][] legalMoves) {
 		// TODO before submission:
 		// Create a Heuristic object with the chosen features and also input the chosen weights
-
-		// e.g. for old feature set:
-		// return pickMove(s, legalMoves, new double[]{-10.0, 3.1866102280509017, -10.0, 
-		// 	-2.6166250910102162, 10.0, 9.079192461274538, -10.0, -10.0, -3.5319369732970207, 
-		// 	-1.3557653061908144, -1.2930516421214744, 8.937515278308917, -10.0, 9.695111692980946, 
-		// 	-10.0, -8.04781332965197, -10.0, -10.0, -10.0, -6.576121188396466, -9.577979914066237, 
-		// 	-10.0}, new Heuristic(true, false));
-
-		// e.g. for new feature set:
-		// return pickMove(s, legalMoves, new double[]{5.549082691824574, 4.2301207149571525, 
-		// 	-10.0, -4.8941246823863676, -10.0, -10.0}, new Heuristic(false, true));
-		
 		return pickMove(s, legalMoves, null, null);
 	}
 
@@ -84,6 +72,11 @@ public class PlayerSkeleton {
 		State s = new State();
 		new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
+		// double[] weights = new double[]{-7.98667, -2.92195, -2.24357, -10.0, -10.0, -4.81467};
+		// double[] weights = {-0.4944712922445228, 0.14814799954876456, -0.9250354407343329, -1.210228068000284, -0.6363751749245313, -0.3071493143829803,
+		// 		0.4062421734216026, 0.4053785630482645, 0.7203562102658518, 0.6458317403226688, 0.33541924448498417,
+		// 		0.156339060819642, 1.2098194382476808, -0.12143020086913736, 1.5266470763709517, 0.5760539680303807,
+		// 		0.11214199088469634, -0.2072277305271486, 1.2884998585410108, 0.9616177885473564, 0.13438465406024958, 1.1912072595739716};
 		while(!s.hasLost()) {
 			s.makeMove(p.pickMove(s, s.legalMoves()));
 			s.draw();

@@ -37,9 +37,9 @@ class Simulation implements Callable<Integer> {
 		for (int i = 0; i < numRepetitions; i++) { // compute std dev
 			sumSqDiff += Math.pow((results[i] - mean), 2);
 		}
-		double score = sum / Math.sqrt(sumSqDiff / numRepetitions); // compute final score (= sum / std dev)
+		double score = sum / Math.sqrt(sumSqDiff); // compute final score (= sum / std dev)
 		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
-			"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
+			"Results: " + Arrays.toString(results) + " = " + (int) score);
 		return (int) score;
     }
 
