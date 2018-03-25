@@ -1,31 +1,134 @@
-public class HeuristicNew {
-	public static final int NUM_FEATURES = 6;
-	public static final boolean db = false; // set true to turn debug statements on
-    public static final boolean db2 = false; // set true to debug rows eliminated (recommended set db = false)
-	double[] weights;
-	int weightCounter;
-    TempState s;
+import java.util.Arrays;
+public class Evaluator {
+	private static final int TOTAL_NUM_FEATURES = 9;
 
-    public HeuristicNew(TempState s, double[] inputWeights) {
-        this.weights = inputWeights;
-        this.s = s;
-        this.weightCounter = 0;
-    }
+	// Indices for each feature to keep track of which feature to use
+	private static final int INDEX_ROWS_CLEARED = Heuristic.INDEX_ROWS_CLEARED;
+	private static final int INDEX_COL_HEIGHT = Heuristic.INDEX_COL_HEIGHT;
+	private static final int INDEX_COL_HEIGHT_DIFF = Heuristic.INDEX_COL_HEIGHT_DIFF;
+	private static final int INDEX_MAX_COL_HEIGHT = Heuristic.INDEX_MAX_COL_HEIGHT;
+	private static final int INDEX_NUM_HOLES = Heuristic.INDEX_NUM_HOLES;
+	private static final int INDEX_LANDING_HEIGHT = Heuristic.INDEX_LANDING_HEIGHT;
+	private static final int INDEX_ROW_TRANSITIONS = Heuristic.INDEX_ROW_TRANSITIONS;
+	private static final int INDEX_COL_TRANSITIONS = Heuristic.INDEX_COL_TRANSITIONS;
+	private static final int INDEX_WELL_SUMS = Heuristic.INDEX_WELL_SUMS;
+
+	// Flags for features
+	private char[] featureFlags;
+	private int numFeatures;
+	private double[] weights;
+	private int weightCounter;
+	private TempState s;
+	private int[] colHeights;
+
+	public Evaluator(Heuristic h, TempState s, double[] inputWeights) {
+		this.featureFlags = h.getFeatureFlags();
+		this.numFeatures = h.getNumFeatures();
+		this.weightCounter = 0;
+		this.weights = inputWeights;
+		this.s = s;
+	}
 
 	public double evaluate() {
 		int[][] field = s.getField();
-        if (db) s.printField(s.getField());
+		this.colHeights = colHeights(field);
 
-        int[] colHeights = colHeights(field);
-        return weightedLandingHeight(s) + weightedRowsEliminated(s) + weightedNumRowTranstions(field) + weightedNumColTranstions(field)
-                + wNumHoles(field, colHeights) + weightedWellSums(field);
+		return weightedNumRowsCleared() 
+				+ weightedSumColHeight(colHeights) 
+				+ weightedSumColDiff(colHeights) 
+				+ weightedMaxColHeight(colHeights) 
+				+ weightedNumHoles(field, colHeights) 
+				+ weightedLandingHeight(s) 
+				+ weightedNumRowTranstions(field) 
+				+ weightedNumColTranstions(field)
+                + weightedWellSums(field);
+	}
+
+
+	/** METHODS TO COMPUTE FEATURE SUM **/
+	// Returns weighted number of rows cleared by playing this move
+	private double weightedNumRowsCleared() {
+		if (featureFlags[INDEX_ROWS_CLEARED] != '1') {
+			return 0;
+		}
+	    int rowsEliminated = s.getRowsCleared() - s.getRowsPrevCleared();
+	    return getNextWeight() * rowsEliminated;
+	}
+
+	// Returns weighted sum of column heights
+	private double weightedSumColHeight(int[] colHeights) {
+		if (featureFlags[INDEX_COL_HEIGHT] != '1') {
+			return 0;
+		}
+
+		double weightedSum = 0;
+
+		// iterate through columns, count height for each col
+		for (int i = 0; i < colHeights.length; i++) {
+			weightedSum += getNextWeight() * colHeights[i];
+		}
+
+		return weightedSum;
+	}
+
+	// Returns weighted sum of absolute differences between adjacent columns
+	private double weightedSumColDiff(int[] colHeights) {
+		if (featureFlags[INDEX_COL_HEIGHT_DIFF] != '1') {
+			return 0;
+		}
+
+		double weightedSum = 0;
+
+		for (int i = 1; i < colHeights.length; i++) {
+			weightedSum += getNextWeight() * Math.abs(colHeights[i] - colHeights[i-1]);
+		}
+		return weightedSum;
+	}
+
+	// Returns weighted max col
+	private double weightedMaxColHeight(int[] colHeights) {
+		if (featureFlags[INDEX_MAX_COL_HEIGHT] != '1') {
+			return 0;
+		}
+
+		int max = 0;
+
+		for (int i = 0; i < colHeights.length; i++) {
+			if (colHeights[i] > max) {
+				max = colHeights[i];
+			}
+		}
+
+		return getNextWeight() * max;
+	}
+
+	// Returns weighted number of holes
+	private double weightedNumHoles(int[][] field, int[] colHeights) {
+		if (featureFlags[INDEX_NUM_HOLES] != '1') {
+			return 0;
+		}
+
+		int numHoles = 0;
+
+		for (int col = 0; col < colHeights.length; col++) {
+			for (int row = colHeights[col] - 1; row >= 0; row--) {
+				if (field[row][col] == 0) {
+					numHoles++;
+				}
+			}
+		}
+
+		return getNextWeight() * numHoles;
 	}
 
     private double weightedLandingHeight (TempState s) {
+		if (featureFlags[INDEX_LANDING_HEIGHT] != '1') {
+			return 0;
+		}
+
 	    return getNextWeight() * landingHeight(s);
     }
 
-    // Feature 1
     // Landing Height:
     // The height where the piece is put = the height of the column BEFORE piece is put + (the height of the piece / 2)
     // Also equivalent to height of column AFTER piece is put - (the height of the piece / 2) (?)
@@ -34,26 +137,17 @@ public class HeuristicNew {
 	    int heightPiece = s.getHeightOfPeice();
 	    int landingHeight = s.getHeightOfCol(s.getStateSlot()) - heightPiece/2;
 
-        if (db) System.out.println("landingHeight: " + landingHeight);
         return landingHeight;
     }
 
-    // Feature 2
-    private double weightedRowsEliminated (TempState s) {
-	    int rowsEliminated = s.getRowsCleared() - s.getRowsPrevCleared();
-
-        if (db2 && rowsEliminated > 0) {
-            System.out.println(s.getRowsPrevCleared() +" --> " + s.getRowsCleared());
-            System.out.println("rowsEliminated: " + rowsEliminated);
-        }
-        return getNextWeight() * rowsEliminated;
-    }
-
     private double weightedNumRowTranstions(int[][] field) {
+		if (featureFlags[INDEX_ROW_TRANSITIONS] != '1') {
+			return 0;
+		}
+
         return getNextWeight() * numRowTransitions(field);
     }
 
-    // Feature 3
     // The total number of row transitions.
     // A row transition occurs when an empty cell is adjacent to a filled cell
     // on the same row and vice versa.
@@ -69,15 +163,17 @@ public class HeuristicNew {
                 }
             }
         }
-        if (db) System.out.println("numRowTranstions: " + count);
         return count;
     }
 
     private double weightedNumColTranstions(int[][] field) {
+		if (featureFlags[INDEX_COL_TRANSITIONS] != '1') {
+			return 0;
+		}
+
         return getNextWeight() * numColTransitions(field);
     }
 
-    // Feature 4
     // The total number of column transitions.
     // A column transition occurs when an empty cell is adjacent to a filled cell
     // on the same column and vice versa.
@@ -93,55 +189,14 @@ public class HeuristicNew {
                 }
             }
         }
-        if (db) System.out.println("numColTranstions: " + count);
         return count;
     }
 
-    // Returns array of column heights
-    private int[] colHeights(int[][] field) {
-        int[] colHeights = new int[field[0].length];
-
-        // System.out.print("Col heights: ");
-
-        for (int col = 0; col < field[0].length; col++) {
-            int row = field.length - 1;
-
-            while (row >= 0 && field[row][col] == 0) {
-                row--;
-            }
-            colHeights[col] = row + 1;
-            // System.out.print(colHeights[col] + " ");
-        }
-        // System.out.println();
-
-        return colHeights;
-    }
-
-    // Feature 5
-    // Returns weighted number of holes
-    // A hole is an empty cell that has at least one filled cell above it in the same column.
-    // Example
-    // 100
-    // 110
-    // 100
-    // === is still 1 hole!
-    private double wNumHoles(int[][] field, int[] colHeights) {
-        int numHoles = 0;
-
-        for (int col = 0; col < colHeights.length; col++) {
-            for (int row = colHeights[col] - 1; row >= 0; row--) {
-                if (field[row][col] == 0) {
-                    numHoles++;
-                }
-            }
-        }
-
-        if (db) System.out.println("numHoles: " + numHoles);
-        return getNextWeight() * numHoles;
-    }
-
-    // Feature 6
     private double weightedWellSums(int[][] field) {
+		if (featureFlags[INDEX_WELL_SUMS] != '1') {
+			return 0;
+		}
+
         return getNextWeight() * wellSums(field);
     }
 
@@ -170,7 +225,6 @@ public class HeuristicNew {
             }
         }
 
-        if (db) System.out.println("Overall Well sum: " + count);
         return count;
     }
 
@@ -192,10 +246,8 @@ public class HeuristicNew {
 	        startRow++;
         }
         if (field[startRow][startColumn] != 0) {
-            //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Normal Well sum: " + sumFromOneToN(count));
 	    return sumFromOneToN(count);
     }
 
@@ -215,10 +267,8 @@ public class HeuristicNew {
             startRow++;
         }
         if (field[startRow][0] != 0) {
-            //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Left Well sum: " + sumFromOneToN(count));
         return sumFromOneToN(count);
     }
 
@@ -239,12 +289,27 @@ public class HeuristicNew {
             startRow++;
         }
         if (field[startRow][numCols -1] != 0) {
-            //System.out.println("Not a well!");
             return 0;
         }
-        //System.out.println("Right Well sum: " + sumFromOneToN(count));
         return sumFromOneToN(count);
     }
+
+	/** HELPER METHODS **/
+	// Returns array of column heights
+	private int[] colHeights(int[][] field) {
+		int[] colHeights = new int[field[0].length];
+
+		for (int col = 0; col < field[0].length; col++) {
+			int row = field.length - 1;
+
+			while (row >= 0 && field[row][col] == 0) {
+				row--;
+			}
+			colHeights[col] = row + 1;
+		}
+
+		return colHeights;
+	}
 
     // Given an N returns sum From One to N.
     // eg: Input N. Ouput 1 + 2 + 3 + 4 + 5.
@@ -257,7 +322,5 @@ public class HeuristicNew {
 		return weights[weightCounter++];
 	}
 
-    public static int getNumFeatures() {
-        return NUM_FEATURES;
-    }
+	
 }

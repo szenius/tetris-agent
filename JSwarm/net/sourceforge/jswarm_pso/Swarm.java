@@ -128,7 +128,6 @@ public class Swarm implements Iterable<Particle> {
 				//Update 'best global' position
 				for (int i = 0; i < fits.length; i++) {
 					particles[i].setFitness(fits[i], true);
-					System.out.println(Arrays.toString(particles[i].getPosition()) + ": " + fits[i]);
 
 					if (fitnessFunction.isBetterThan(bestFitness, fits[i])) {
 						bestFitness = fits[i]; // Copy best fitness, index, and position vector

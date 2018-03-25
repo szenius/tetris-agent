@@ -8,41 +8,29 @@ import java.util.List;
 
 
 class SimulationPool {
+    private Heuristic h;
 	private int games;
 	private double[][] weightSets;
-    private boolean isBatch; // default true
-    private boolean findAverage; // default false
     private int numRepetitions;
 
     public SimulationPool() {
+        this.h = new Heuristic(false, true);
         this.games = 0;
         this.weightSets = null;
-        this.isBatch = true;
-        this.findAverage = false;
         this.numRepetitions = 1;
     }
 
-	public SimulationPool(int games, double[][] weightSets) {
-		this.games = games;
-        this.weightSets = weightSets;
-        this.isBatch = true;
-        this.findAverage = false;
-        this.numRepetitions = 1;
-	}
-
-    public SimulationPool(int games, double[][] weightSets, boolean isBatch) {
+    public SimulationPool(Heuristic h, int games, double[][] weightSets) {
+        this.h = h;
         this.games = games;
         this.weightSets = weightSets;
-        this.isBatch = isBatch;
-        this.findAverage = false;
         this.numRepetitions = 1;
     }
 
-    public SimulationPool(int games, double[][] weightSets, boolean isBatch, boolean findAverage, int numRepetitions) {
+    public SimulationPool(Heuristic h, int games, double[][] weightSets, int numRepetitions) {
+        this.h = h;
         this.games = games;
         this.weightSets = weightSets;
-        this.isBatch = isBatch;
-        this.findAverage = findAverage;
         this.numRepetitions = numRepetitions;
     }
 
@@ -67,11 +55,7 @@ class SimulationPool {
        	//For each generation, we run a 1000 games. For each game, we assign a thread.
         for(int i=0; i< games; i++){
             Simulation game;
-            if (isBatch) {
-                game = new Simulation(weightSets[i], findAverage, numRepetitions);
-            } else {
-                game = new Simulation(weightSets[0]);
-            }
+            game = new Simulation(h, weightSets[i], numRepetitions);
             Future<Integer> future = executor.submit(game); //Add Thread to be executed by thread pool
             results.add(future); //For retrieving results from thread.
         }
