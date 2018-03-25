@@ -18,7 +18,7 @@ public class PlayerSkeleton {
 		// return pickMove(s, legalMoves, new double[]{5.549082691824574, 4.2301207149571525, 
 		// 	-10.0, -4.8941246823863676, -10.0, -10.0}, new Heuristic(false, true));
 		
-		return pickMove(s, legalMoves, null, null);
+    return pickMove(s, legalMoves, null, null);
 	}
 
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {

@@ -27,7 +27,7 @@ public class PSO {
 		, new TParticle(h.getNumFeatures())
 		, new TFitnessFunction(h));
 
-		// Set position (and velocity) constraints. 
+    // Set position (and velocity) constraints. 
 		// i.e.: where to look for solutions
 		swarm.setMaxPosition(10);
 		swarm.setMinPosition(-10);
