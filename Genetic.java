@@ -16,7 +16,8 @@ public class Genetic {
     public static final int SAMPLE_SIZE = 400;
     public static final int GAME_SIZE = 10;
     public static final double ALLOWABLE_VARIANCE_LIMIT = 1.0;
-    public static final double CUT_OFF = 0.5;
+    public static final double CUT_OFF = 0.25;
+    public static final double CHILDREN_TO_BREED = 8;
     private static final Random RNG = new Random();
 
     private double[][] weightSet = new double[SAMPLE_SIZE][NUM_FEATURES];
@@ -25,13 +26,6 @@ public class Genetic {
     private int cycle = 0;
     private long timeStart;
     private long timeEnd;
-
-    // TODO read heuristic from file, store them for use, then breed.
-    public Genetic(String filename) {
-        // TODO import file
-
-        runGeneration(weightSet);
-    }
 
     /**
      * Creates a new Genetic object with no initial data-set.
@@ -126,17 +120,15 @@ public class Genetic {
     }
 
     public void breedGeneration(EvaluationResult[] evaluations) {
-        // TODO decide on how many to breed into, or infinitely until average score doesn't seem to change much
         double[][] weightSets = new double[SAMPLE_SIZE][NUM_FEATURES];
         int counter = 0;
         Collections.sort(Arrays.asList(evaluations));
         int startingIndex = (int) (CUT_OFF * SAMPLE_SIZE);
         for (int i = startingIndex; i < SAMPLE_SIZE - 1; i += 2) {
-            weightSets[counter] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
-            weightSets[counter + 1] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
-            weightSets[counter + 2] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
-            weightSets[counter + 3] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
-            counter += 4;
+            for (int j = 0; j < CHILDREN_TO_BREED; j++) {
+                weightSets[counter + j] = breedDirectHeuristics(evaluations[i].getWeightSets(), evaluations[i + 1].getWeightSets());
+            }
+            counter += CHILDREN_TO_BREED;
         }
         runGeneration(weightSets);
     }
@@ -151,6 +143,7 @@ public class Genetic {
             System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + (timeEnd - timeStart));
             bestScore = results[SAMPLE_SIZE - 1].rowsCleared;
             bestSet = results[SAMPLE_SIZE - 1];
+            // TODO output to file
         }
         cycle++;
 
