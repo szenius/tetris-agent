@@ -63,6 +63,7 @@ public class Heuristic {
 
 	public int getNumFeatures() {
 		return numFeatures;
+	}
 
 	public char[] getFeatureFlags() {
 		return featureFlags;
