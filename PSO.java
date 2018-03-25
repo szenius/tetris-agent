@@ -37,7 +37,7 @@ public class PSO {
 			long startIt = System.currentTimeMillis();
 			swarm.evolve();
 			long endIt = System.currentTimeMillis();
-			System.out.println("Iteration " + i + ": " + swarm.toStringStats() + " in " + (endIt/startIt)/1e3 + " s");
+			System.out.println("Iteration " + i + ": " + swarm.toStringStats() + " in " + (endIt - startIt)/1e3 + " s");
 		}
 
 		// Print en results
