@@ -38,16 +38,18 @@ class Simulation implements Callable<Integer> {
 			results[i] = result;
 			sum += results[i];
 		}
-		double mean =  sum / numRepetitions;
 		Arrays.sort(results);
 		double mean = sum / numRepetitions;
-		double median = results[numRepetitions/2];
+		double median = 0;
+		if (numRepetitions%2==0) median = 0.5*(results[numRepetitions/2] + results[(numRepetitions/2)+1]);
+		else median = results[numRepetitions/2];
+		double score = 0;
 		if (USE_MEAN) score = mean;
 		else score = median;
 		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
 			"Results: " + Arrays.toString(results) + "; " +
 			"Median (" + !USE_MEAN + ") = " + median + "; Mean (" + USE_MEAN + ") = " + mean);
-		return score;
+		return (int) score;
 
 		// double sumSqDiff = 0;
 		// for (int i = 0; i < numRepetitions; i++) { // compute std dev
