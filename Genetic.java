@@ -15,7 +15,7 @@ public class Genetic {
     public static final int WEIGHT_RANGE = 5;
     public static final int SAMPLE_SIZE = 400;
     public static final int GAME_SIZE = 10;
-    public static final double ALLOWABLE_VARIANCE_LIMIT = 20.0;
+    public static final double ALLOWABLE_VARIANCE_LIMIT = 10.0;
     public static final double CUT_OFF = 0.25;
     public static final double CHILDREN_TO_BREED = 8;
     private static final Random RNG = new Random();
@@ -141,7 +141,7 @@ public class Genetic {
             for (int i = 0; i < NUM_FEATURES; i++) {
                 System.out.print(results[SAMPLE_SIZE - 1].getWeightSets()[i] + ", ");
             }
-            System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + (timeEnd - timeStart));
+            System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + ((timeEnd - timeStart) / 1e3) + " seconds");
             bestScore = results[SAMPLE_SIZE - 1].rowsCleared;
             bestSet = results[SAMPLE_SIZE - 1];
             // TODO output to file
@@ -192,6 +192,6 @@ public class Genetic {
         }
 
         double variance = s2 / (double) (GAME_SIZE - 1);
-        return (int) (mean - Math.sqrt(variance));
+        return (int) (mean);
     }
 }
