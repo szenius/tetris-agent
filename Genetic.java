@@ -150,7 +150,7 @@ public class Genetic {
             printBestScorer(evaluations, true);
             breedGeneration(evaluations);
         }*/
-        if (cycle <= 25) {
+        if (cycle >= 25) {
             printBestScorer(evaluations, true);
         } else {
             printBestScorer(evaluations, true);
