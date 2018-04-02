@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,10 +16,10 @@ public class Genetic {
     public static final int NUM_FEATURES = 6;
     public static final int INDEX_MID = 10;
     public static final int INDEX_VARIANCE = 4;
-    public static final int WEIGHT_RANGE = 5;
-    public static final int SAMPLE_SIZE = 400;
+    public static final int WEIGHT_RANGE = 10;
+    public static final int SAMPLE_SIZE = 200;
     public static final int GAME_SIZE = 10;
-    public static final double ALLOWABLE_VARIANCE_LIMIT = 10.0;
+    public static final double ALLOWABLE_VARIANCE_LIMIT = 20.0;
     public static final double CUT_OFF = 0.25;
     public static final double CHILDREN_TO_BREED = 8;
     private static final Random RNG = new Random();
@@ -36,6 +40,37 @@ public class Genetic {
             weightSet[i] = createRandomWeights();
         }
         runGeneration(weightSet);
+    }
+
+    public Genetic(String filename) {
+        try {
+			/*
+			 * Converts the text in the file into a string,
+			 * before processing.
+			 */
+			double[][] initialWeights = new double[10][NUM_FEATURES];
+            BufferedReader input = new BufferedReader(new FileReader(filename));
+            String currentLine= input.readLine();
+            int counter = 0;
+            String[] splitted;
+            while (currentLine != null){
+                splitted = currentLine.split(" ");
+                initialWeights[counter] = Arrays.stream(splitted)
+                        .mapToDouble(Double::parseDouble)
+                        .toArray();;
+                currentLine= input.readLine();
+                counter++;
+            }
+            input.close();
+            for (int i = 0; i < SAMPLE_SIZE; i++) {
+                weightSet[i] = breedDirectHeuristics(initialWeights[RNG.nextInt(10)], initialWeights[RNG.nextInt(10)]);
+            }
+            runGeneration(weightSet);
+        } catch (FileNotFoundException fnfe) {
+
+        } catch (IOException ie) {
+
+        }
     }
 
     private double[] createRandomWeights() {
@@ -75,10 +110,10 @@ public class Genetic {
         //int secondIndex = RNG.nextInt(NUM_FEATURES);
 
         if (RNG.nextDouble() <= 0.5) {
-            weights[index] += 0.5 * WEIGHT_RANGE * RNG.nextDouble();
+            weights[index] += WEIGHT_RANGE * RNG.nextDouble();
             //weights[secondIndex] += RNG.nextDouble();
         } else {
-            weights[index] -= 0.5 * WEIGHT_RANGE * RNG.nextDouble();
+            weights[index] -= WEIGHT_RANGE * RNG.nextDouble();
             //weights[secondIndex] -= RNG.nextDouble();
         }
         return weights;
@@ -86,23 +121,36 @@ public class Genetic {
 
     public void runGeneration(double[][] weightSets) {
         EvaluationResult[] evaluations = new EvaluationResult[SAMPLE_SIZE];
-        int score;
+        int score = 0;
         int[] gameScores = new int[GAME_SIZE];
         timeStart = System.currentTimeMillis();
-        ExecutorService executor = Executors.newFixedThreadPool(GAME_SIZE); //Threadpool size = ?
+        ExecutorService executor = Executors.newFixedThreadPool(3); //Threadpool size = ?
         for (int i = 0; i < SAMPLE_SIZE; i++) {
             ArrayList<Future<Integer>> results = new ArrayList<Future<Integer>>();
-            Simulation game = new Simulation(weightSets[i]);
-            for (int j = 0; j < GAME_SIZE; j++) {
+            Simulation game = new Simulation(new Heuristic(false, true), weightSets[i], 10);
+            Future<Integer> future = executor.submit(game);
+/*            for (int j = 0; j < GAME_SIZE; j++) {
                 Future<Integer> future = executor.submit(game); //Add Thread to be executed by thread pool
                 results.add(future);
+            }*/
+            //score = getMedian(results);
+            try {
+                score = future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                assert false: "Something wrong happened!";
             }
-            score = calculateSdScore(results);
+            System.out.println("[" + cycle + "], " + score + ", " + Arrays.toString(weightSets[i]));
             evaluations[i] = new EvaluationResult(weightSets[i], score);
         }
         double variance = calculateVariance(evaluations);
         timeEnd = System.currentTimeMillis();
-        if (variance <= ALLOWABLE_VARIANCE_LIMIT) {
+/*        if (variance <= ALLOWABLE_VARIANCE_LIMIT) {
+            printBestScorer(evaluations, true);
+        } else {
+            printBestScorer(evaluations, true);
+            breedGeneration(evaluations);
+        }*/
+        if (cycle <= 25) {
             printBestScorer(evaluations, true);
         } else {
             printBestScorer(evaluations, true);
@@ -136,12 +184,12 @@ public class Genetic {
 
     public void printBestScorer(EvaluationResult[] results, boolean doPrintFull) {
         Collections.sort(Arrays.asList(results));
-        System.out.println("Cycle " + cycle);
+        System.out.println();
         if (results[SAMPLE_SIZE - 1].rowsCleared > bestScore) {
             for (int i = 0; i < NUM_FEATURES; i++) {
                 System.out.print(results[SAMPLE_SIZE - 1].getWeightSets()[i] + ", ");
             }
-            System.out.println("\nBest score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + ((timeEnd - timeStart) / 1e3) + " seconds");
+            System.out.println("\nCycle " + cycle + " Best score: " + results[SAMPLE_SIZE-1].rowsCleared + " Time taken: " + ((timeEnd - timeStart) / 1e3) + " seconds");
             bestScore = results[SAMPLE_SIZE - 1].rowsCleared;
             bestSet = results[SAMPLE_SIZE - 1];
             // TODO output to file
@@ -164,7 +212,7 @@ public class Genetic {
         }
 
         double variance = s2 / (double) (SAMPLE_SIZE - 1);
-        System.out.println(variance);
+        //System.out.println(variance);
         return variance;
     }
 
@@ -193,5 +241,18 @@ public class Genetic {
 
         double variance = s2 / (double) (GAME_SIZE - 1);
         return (int) (mean);
+    }
+
+    private int getMedian(ArrayList<Future<Integer>> gameScore) {
+        ArrayList<Integer> results = new ArrayList<>();
+        try {
+            for (int i = 0; i < GAME_SIZE; i++) {
+                results.add(gameScore.get(i).get());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            assert false: "Something wrong happened!";
+        }
+        Collections.sort((results));
+        return GAME_SIZE % 2 == 0 ? (int) (results.get(GAME_SIZE/2 + 1) + results.get(GAME_SIZE/2))/2 : results.get(GAME_SIZE/2);
     }
 }
