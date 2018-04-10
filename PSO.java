@@ -2,6 +2,7 @@ import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 import java.util.*;
 
 public class PSO {
+	public static final boolean SIMULATED_ANNEALING = false;
 	public static void main(String[] args) {
 		Heuristic h = parseArgs(args);
 
@@ -31,9 +32,12 @@ public class PSO {
 		// i.e.: where to look for solutions
 		swarm.setMaxPosition(10);
 		swarm.setMinPosition(-10);
-		swarm.setInertia(2);
-		swarm.setGlobalIncrement(0.2);
-		swarm.setParticleIncrement(0.2);
+
+		if (SIMULATED_ANNEALING) {
+			swarm.setInertia(2);
+			swarm.setGlobalIncrement(0.2);
+			swarm.setParticleIncrement(0.2);
+		}
 
 		// Optimize a few times
 		for( int i = 0; i < 10; i++ ) {
@@ -46,11 +50,13 @@ public class PSO {
 			// Run evolution for this iteration
 			swarm.evolve();
 
-			// After each evolution: reduce velocity of particles
-			// 						+ allow particles to get closer to local/global best
-			swarm.setInertia(swarm.getInertia() * 0.9);
-			swarm.setGlobalIncrement(swarm.getGlobalIncrement() * 1.15);
-			swarm.setParticleIncrement(swarm.getParticleIncrement() * 1.1);
+			if (SIMULATED ANNEALING) {
+				// After each evolution: reduce velocity of particles
+				// 						+ allow particles to get closer to local/global best
+				swarm.setInertia(swarm.getInertia() * 0.9);
+				swarm.setGlobalIncrement(swarm.getGlobalIncrement() * 1.15);
+				swarm.setParticleIncrement(swarm.getParticleIncrement() * 1.1);
+			}
 			
 			long endIt = System.currentTimeMillis();
 
