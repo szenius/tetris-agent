@@ -50,7 +50,7 @@ public class PSO {
 			// Run evolution for this iteration
 			swarm.evolve();
 
-			if (SIMULATED ANNEALING) {
+			if (SIMULATED_ANNEALING) {
 				// After each evolution: reduce velocity of particles
 				// 						+ allow particles to get closer to local/global best
 				swarm.setInertia(swarm.getInertia() * 0.9);
