@@ -36,8 +36,9 @@ class Simulation implements Callable<Integer> {
 			results[i] = playGame();
 			sum += results[i];
 			r.add((int) results[i]);
+			System.out.println("[" + results[i] + ", ");
 		}
-
+		System.out.println("]");
 		Collections.sort((r));
 		return numRepetitions % 2 == 0 ? (int) (r.get(numRepetitions/2 + 1) + r.get(numRepetitions/2))/2 : r.get(numRepetitions/2);
 		//return (int) results[0];
