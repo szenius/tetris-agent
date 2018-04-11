@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 class Simulation implements Callable<Integer> {
 	private Heuristic h;
@@ -27,20 +30,17 @@ class Simulation implements Callable<Integer> {
 
 	public Integer call() {
 		double[] results = new double[numRepetitions];
+		ArrayList<Integer> r = new ArrayList<>();
 		double sum = 0;
 		for (int i = 0; i < numRepetitions; i++) { // compute sum
 			results[i] = playGame();
 			sum += results[i];
+			r.add((int) results[i]);
 		}
-		double mean =  sum / numRepetitions;
-		double sumSqDiff = 0;
-		for (int i = 0; i < numRepetitions; i++) { // compute std dev
-			sumSqDiff += Math.pow((results[i] - mean), 2);
-		}
-		double score = sum / Math.sqrt(sumSqDiff / numRepetitions) * 1000; // compute final score (= sum / std dev * 1000)
-		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
-			"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
-		return (int) score;
+
+		Collections.sort((r));
+		return numRepetitions % 2 == 0 ? (int) (r.get(numRepetitions/2 + 1) + r.get(numRepetitions/2))/2 : r.get(numRepetitions/2);
+		//return (int) results[0];
     }
 
 	/**
@@ -50,9 +50,12 @@ class Simulation implements Callable<Integer> {
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
+        //new TFrame(s);
         while(!s.hasLost()) {
         	try {
             	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets, h));
+            	//s.draw();
+            	//s.drawNext(0,0);
             } catch (Exception e) {
             	e.printStackTrace();
             	return -1;
