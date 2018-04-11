@@ -32,14 +32,14 @@ class Simulation implements Callable<Integer> {
 		double[] results = new double[numRepetitions];
 		ArrayList<Integer> r = new ArrayList<>();
 		double sum = 0;
-		System.out.println("[");
+		System.out.print("[");
 		for (int i = 0; i < numRepetitions; i++) { // compute sum
 			results[i] = playGame();
 			sum += results[i];
 			r.add((int) results[i]);
 			System.out.print(results[i] + ", ");
 		}
-		System.out.print("]");
+		System.out.print("]\n");
 		Collections.sort((r));
 		return numRepetitions % 2 == 0 ? (int) (r.get(numRepetitions/2 + 1) + r.get(numRepetitions/2))/2 : r.get(numRepetitions/2);
 		//return (int) results[0];
