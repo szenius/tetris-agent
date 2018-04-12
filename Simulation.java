@@ -1,10 +1,16 @@
 import java.util.concurrent.Callable;
 import java.util.Arrays;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 class Simulation implements Callable<Integer> {
 	private Heuristic h;
 	private double[] weightSets;
 	private int numRepetitions;
+
+	private int[][][] legalMovesFor8Col = new int[7][][];
+	private Logger LOGGER = Logging.getInstance();
 
 	public Simulation() {
 		h = new Heuristic(false, true);
@@ -40,6 +46,8 @@ class Simulation implements Callable<Integer> {
 		double score = sum / Math.sqrt(sumSqDiff / numRepetitions) * 1000; // compute final score (= sum / std dev * 1000)
 		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
 			"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
+		//LOGGER.info("Weights: " + Arrays.toString(weightSets) + "\n" +
+		//	"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
 		return (int) score;
     }
 
@@ -55,16 +63,17 @@ class Simulation implements Callable<Integer> {
             	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets, h));
             } catch (Exception e) {
             	e.printStackTrace();
+            	LOGGER.log(Level.SEVERE, "an exception was thrown" , e);
             	return -1;
             }
             try {
                 Thread.sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "an exception was thrown" , e);
             }
         }
         return s.getRowsCleared();
 	}
-
 
 }
