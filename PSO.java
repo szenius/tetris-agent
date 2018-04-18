@@ -1,5 +1,4 @@
 import JSwarm.net.sourceforge.jswarm_pso.Swarm;
-import java.util.*;
 
 public class PSO {
 	public static final boolean SIMULATED_ANNEALING = false;
@@ -24,7 +23,7 @@ public class PSO {
 	 * @return
 	**/
 	private static void run(Heuristic h) {
-		Swarm swarm = new Swarm(1000
+		Swarm swarm = new Swarm(200
 		, new TParticle(h.getNumFeatures())
 		, new TFitnessFunction(h));
 
@@ -40,7 +39,7 @@ public class PSO {
 		}
 
 		// Optimize a few times
-		for( int i = 0; i < 10; i++ ) {
+		for( int i = 0; i < 20; i++ ) {
 			System.out.println("Starting iteration " + i + "; " + swarm.getNumberOfParticles() + " particles;\n" 
 				+ "Inertia: " + swarm.getInertia() + "; GIncrement: " + swarm.getGlobalIncrement()
 				+ "PIncrement: " + swarm.getParticleIncrement());

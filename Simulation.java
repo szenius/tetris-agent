@@ -2,7 +2,7 @@ import java.util.concurrent.Callable;
 import java.util.Arrays;
 
 class Simulation implements Callable<Integer> {
-	private static final boolean USE_MEAN = false;
+	private static final boolean USE_MEAN = true;
 
 	private Heuristic h;
 	private double[] weightSets;
