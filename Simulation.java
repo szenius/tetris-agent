@@ -46,7 +46,7 @@ class Simulation implements Callable<Integer> {
 		double score = 0;
 		if (USE_MEAN) score = mean;
 		else score = median;
-		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
+		System.out.println("Weights: " + Arrays.toString(weightSets) + "; " +
 			"Results: " + Arrays.toString(results) + "; " +
 			"Median (" + !USE_MEAN + ") = " + median + "; Mean (" + USE_MEAN + ") = " + mean);
 		return (int) score;
