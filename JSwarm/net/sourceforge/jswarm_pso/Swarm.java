@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class Swarm implements Iterable<Particle> {
 
-	public static final boolean EVALUATE_BATCH = true;
+	public static final boolean EVALUATE_BATCH = false;
 
 	public static double DEFAULT_GLOBAL_INCREMENT = 0.9;
 	public static double DEFAULT_INERTIA = 0.95; 
@@ -148,7 +148,7 @@ public class Swarm implements Iterable<Particle> {
 				//---
 				for (int i = 0; i < particles.length; i++) {
 					// Evaluate particle
-					double fit = fitnessFunction.evaluate(particles[i]);
+					double fit = fitnessFunction.evaluateBatch(particles[i]);
 					numberOfEvaliations++; // Update counter
 
 					// Update 'best global' position
