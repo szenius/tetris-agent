@@ -148,7 +148,7 @@ public class Swarm implements Iterable<Particle> {
 				//---
 				for (int i = 0; i < particles.length; i++) {
 					// Evaluate particle
-					double fit = fitnessFunction.evaluateBatch(particles[i]);
+					double fit = fitnessFunction.evaluate(particles[i].getPosition())[0];
 					numberOfEvaliations++; // Update counter
 
 					// Update 'best global' position

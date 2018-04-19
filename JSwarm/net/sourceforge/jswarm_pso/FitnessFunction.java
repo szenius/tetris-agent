@@ -37,7 +37,7 @@ public abstract class FitnessFunction {
 	 * @param position : Particle's position
 	 * @return Fitness function for a particle
 	 */
-	public abstract double evaluate(double position[]);
+	public abstract int[] evaluate(double position[]);
 
 	/**
 	 * Evaluates a batch of particles
@@ -55,7 +55,7 @@ public abstract class FitnessFunction {
 	 */
 	public double evaluate(Particle particle) {
 		double position[] = particle.getPosition();
-		double fit = evaluate(position);
+		double fit = evaluate(position)[0];
 		particle.setFitness(fit, maximize);
 		return fit;
 	}
