@@ -6,12 +6,18 @@ import java.util.concurrent.Future;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 
 class SimulationPool {
     private Heuristic h;
-	private int games;
-	private double[][] weightSets;
+    private int games;
+    private double[][] weightSets;
     private int numRepetitions;
+
+    private EvaluationResult[] evaluations;
+    private Logger LOGGER = Logging.getInstance();
 
     public SimulationPool() {
         this.h = new Heuristic(false, true);
@@ -34,12 +40,18 @@ class SimulationPool {
         this.numRepetitions = numRepetitions;
     }
 
+    public EvaluationResult[] startGAScheduler(EvaluationResult[] evaluations) {
+        this.evaluations = evaluations;
+        startScheduler();
+        return evaluations; 
+    }
+
     /**
     * This method runs X games simulations and assigns each game (with new chromosome/weight) to a thread. 
     * @return 
     **/
-	public int[] startScheduler() {
-	 	if(games <= 0 && weightSets == null) {  
+    public int[] startScheduler() {
+        if(games <= 0 && weightSets == null) {  
             System.out.println("Please specify number of games and weights for each game");
             System.exit(-1);
         }
@@ -47,15 +59,14 @@ class SimulationPool {
         //Gets the number of available processors on computer right now.
         int processors = Runtime.getRuntime().availableProcessors();
 
-        long start = System.nanoTime();
+        //long start = System.nanoTime();
 
-        ExecutorService executor = Executors.newFixedThreadPool(10); //Threadpool size = ?
+        ExecutorService executor = Executors.newFixedThreadPool(3); //Threadpool size = ?
         List<Future<Integer>> results = new ArrayList<Future<Integer>>();
        
-       	//For each generation, we run a 1000 games. For each game, we assign a thread.
+        //For each generation, we run a 1000 games. For each game, we assign a thread.
         for(int i=0; i< games; i++){
-            Simulation game;
-            game = new Simulation(h, weightSets[i], numRepetitions);
+            Simulation game = new Simulation(h, weightSets[i], numRepetitions);
             Future<Integer> future = executor.submit(game); //Add Thread to be executed by thread pool
             results.add(future); //For retrieving results from thread.
         }
@@ -78,12 +89,14 @@ class SimulationPool {
         for(int j=0; j<results.size(); j++) {
             try {
                 gamesResult[j] = results.get(j).get();
+                evaluations[j] = new EvaluationResult(weightSets[j], gamesResult[j]);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                //LOGGER.log(Level.SEVERE, "an exception was thrown", e);
             }
         }
 
-        long end  = System.nanoTime();
+        //long end  = System.nanoTime();
         // System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
