@@ -1,5 +1,4 @@
 import JSwarm.net.sourceforge.jswarm_pso.Swarm;
-import java.util.*;
 
 public class PSO {
 	public static final boolean SIMULATED_ANNEALING = false;
