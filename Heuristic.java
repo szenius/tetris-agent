@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class Heuristic {
-	private static final int TOTAL_NUM_FEATURES = 9;
+	public static final int TOTAL_NUM_FEATURES = 9;
 
 	// Indices for each feature to keep track of which feature to use
 	public static final int INDEX_ROWS_CLEARED = 0;

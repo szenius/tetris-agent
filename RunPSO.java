@@ -10,15 +10,26 @@ public class RunPSO {
 			if (Boolean.parseBoolean(args[1])) {
 				// use old features + combi of new features
 				String bitString = "11111";
-				for (int i = 1; i < Math.pow(2, Heuristic.INDEX_OLD_FEATURES.length); i++) {
-					PSO.main(new String[]{"true", "false", bitString + Integer.toBinaryString(i)});
+				for (int i = 1; i < Math.pow(2, Heuristic.TOTAL_NUM_FEATURES - Heuristic.INDEX_OLD_FEATURES.length); i++) {
+					String bin = Integer.toBinaryString(i);
+					while (bin.length() < Heuristic.TOTAL_NUM_FEATURES - Heuristic.INDEX_OLD_FEATURES.length) {
+						bin = '0' + bin;
+					}
+					// System.out.println(bitString + bin);
+					PSO.main(new String[]{"true", "false", bitString + bin});
 				}
 			} else {
 				// use new features + combi of old features
 				String bitStringStart = "1";
 				String bitStringEnd = "11111";
-				for (int i = 1; i < Math.pow(2, Heuristic.INDEX_NEW_FEATURES.length); i++) {
-					PSO.main(new String[]{"false", "true", bitStringStart + Integer.toBinaryString(i) + bitStringEnd});
+				for (int i = 1; i < Math.pow(2, Heuristic.TOTAL_NUM_FEATURES - Heuristic.INDEX_NEW_FEATURES.length); i++) {
+					String bin = Integer.toBinaryString(i);
+					while (bin.length() < Heuristic.TOTAL_NUM_FEATURES - Heuristic.INDEX_NEW_FEATURES.length) {
+						bin = '0' + bin;
+					}
+
+					// System.out.println(bitStringStart + bin + bitStringEnd);
+					PSO.main(new String[]{"false", "true", bitStringStart + bin + bitStringEnd});
 				}
 			}
 		} else {
