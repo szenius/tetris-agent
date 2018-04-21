@@ -14,10 +14,10 @@ public class PlayerSkeleton {
 		// 	7.320092035545837, -1.6795947290151112, -10.0}, new Heuristic(true, false));
 
 		// e.g. for new feature set:
-		// return pickMove(s, legalMoves, new double[]{10.0, -10.0, -7.631455394594079, 2.1425255943282537, 0.19485158741367403, 
-		// 	-4.781899234177633}, new Heuristic(false, true));
+		return pickMove(s, legalMoves, new double[]{-0.3964893021,-10,-2.566647805,-2.35342398,-6.484329707,-2.130028597}, 
+			new Heuristic(false, true));
 		
-    	return pickMove(s, legalMoves, null, null);
+    	// return pickMove(s, legalMoves, null, null);
 	}
 
 	public int pickMove(State s, int[][] legalMoves, double[] weights) {
