@@ -33,18 +33,18 @@ class Simulation implements Callable<Integer> {
 	
 	public Integer call() {
 		double[] results = new double[numRepetitions];
-		//double sum = 0;
+		double sum = 0;
 		for (int i = 0; i < numRepetitions; i++) { // compute sum
-			itn result = playGame()
+			int result = playGame();
 			while(result == -1) {
-				result = playGame()
+				result = playGame();
 			}
 			results[i] = result;
 			sum += results[i];
 		}
 		Arrays.sort(results);
 		// Compute mean
-		double mean = sum / numRepetitions
+		double mean = sum / numRepetitions;
 		// Compute median
 		double median = 0;
 		if (numRepetitions%2==0) median = 0.5*(results[numRepetitions/2] + results[(numRepetitions/2)+1]);
@@ -52,7 +52,7 @@ class Simulation implements Callable<Integer> {
 
 		double score = 0;
 		if (USE_MEAN) score = mean;
-		else score = median 
+		else score = median; 
 		
 		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
 			"Results: " + Arrays.toString(results) + "; " +
