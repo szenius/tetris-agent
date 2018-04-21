@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 class Simulation implements Callable<Integer> {
+	private static final boolean USE_MEAN = false;
+
 	private Heuristic h;
 	private double[] weightSets;
 	private int numRepetitions;
@@ -33,29 +35,29 @@ class Simulation implements Callable<Integer> {
 		double[] results = new double[numRepetitions];
 		//double sum = 0;
 		for (int i = 0; i < numRepetitions; i++) { // compute sum
-			results[i] = playGame();
-			//sum += results[i];
+			itn result = playGame()
+			while(result == -1) {
+				result = playGame()
+			}
+			results[i] = result;
+			sum += results[i];
 		}
 		Arrays.sort(results);
-		int middle = numRepetitions / 2;
+		// Compute mean
+		double mean = sum / numRepetitions
+		// Compute median
+		double median = 0;
+		if (numRepetitions%2==0) median = 0.5*(results[numRepetitions/2] + results[(numRepetitions/2)+1]);
+		else median = results[numRepetitions/2];
+
 		double score = 0;
-		if(numRepetitions % 2 == 0) {
-			score = (results[middle-1] + results[middle]) / 2;
-		} else {
-			score = results[middle];
-		}
+		if (USE_MEAN) score = mean;
+		else score = median 
 		
-		//double mean =  sum / numRepetitions;
-		//double sumSqDiff = 0;
-		//for (int i = 0; i < numRepetitions; i++) { // compute std dev
-		//	sumSqDiff += Math.pow((results[i] - mean), 2);
-		//}
-		//double score = sum / Math.sqrt(sumSqDiff / numRepetitions) * 1000; // compute final score (= sum / std dev * 1000)
-		//System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
-			//"Results: " + Arrays.toString(results) + " = " + (int) score + "; average = " + (int) mean);
-		
-		//LOGGER.info("Weights: " + Arrays.toString(weightSets) + " ==> " +
-		//	"Results: " + Arrays.toString(results) + " = " + (int) score);
+		System.out.println("Weights: " + Arrays.toString(weightSets) + "\n" +
+			"Results: " + Arrays.toString(results) + "; " +
+			"Median (" + !USE_MEAN + ") = " + median + "; Mean (" + USE_MEAN + ") = " + mean);
+
 		return (int) score;
     }
 

@@ -12,8 +12,13 @@ public class TFitnessFunction extends FitnessFunction {
 		this.h = h;
 	}
 
-	public double evaluate(double[] position) {
-		return -1;
+	public int[] evaluate(double[] position) {
+		// copy position to positionSets[][]
+		double[][] positionSets = new double[1][position.length];
+		for (int j = 0; j < position.length; j++) {
+			positionSets[0][j] = position[j];
+		}
+		return playGames(positionSets);
 	}
 
 	public int[] evaluateBatch(Particle[] particles) {
