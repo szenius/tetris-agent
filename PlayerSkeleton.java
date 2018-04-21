@@ -6,16 +6,16 @@ import java.util.concurrent.Future;
 
 public class PlayerSkeleton {
 
-	public static long SEED_1 = Long.parseLong("HEXENACHT IN THE MIDDLE OF DAY");
-	public static long SEED_2 = Long.parseLong("WfboNJjcuDeKHthYEFSnZPixwqvyXB");
-	public static long SEED_3 = Long.parseLong("Hepburn symbol: 981.12.22-75-A");
-	public static long SEED_4 = Long.parseLong("さざんたじいふえかりそぢこせわべばでぶをづゆよくてめぜぱはひ");
-	public static long SEED_5 = Long.parseLong("LAytÄwDuqVlORpÖsHiadöGZEüÜßSbK");
-	public static long SEED_6 = Long.parseLong("СцаШЫЦчТВИГшМЮЯюДйРяХОЙЗёрзЛлы");
-	public static long SEED_7 = Long.parseLong("ptLNVDWzHYKATdbyokexnXUcÑuqFIi");
-	public static long SEED_8 = Long.parseLong("ՇԾձըգՂկաոՏՈԵցՕՍԷԻԺֆՋքդՓԳլմյՆօծ");
-	public static long SEED_9 = Long.parseLong("哦伊艾艾尺贼德吾艾艾克斯维开艾勒比吉豆贝尔维伊吾艾娜艾丝杰提吉吾诶艾儿艾马西屁艾弗迪");
-	public static long SEED_10 = Long.parseLong("yZAJHhLSEoîrICcâPnDœsMRkVvYdmz");
+	public static long SEED_1 = Double.valueOf("2120296363750892053551767205911971438188").longValue();
+	public static long SEED_2 = Double.valueOf("3449202972967901847754320899091110735747").longValue();
+	public static long SEED_3 = Double.valueOf("5414304584303115864722737577462075564656").longValue();
+	public static long SEED_4 = Double.valueOf("5826809642863256189370983532429533336311").longValue();
+	public static long SEED_5 = Double.valueOf("3173594394258273455855890852024113143201").longValue();
+	public static long SEED_6 = Double.valueOf("4519241202163886814160119316762519084645").longValue();
+	public static long SEED_7 = Double.valueOf("3436946203229242152021138685842822886287").longValue();
+	public static long SEED_8 = Double.valueOf("8625558508231462252766740584019334383908").longValue();
+	public static long SEED_9 = Double.valueOf("6742956422984293152784219678802899579988").longValue();
+	public static long SEED_10 = Double.valueOf("6945314697774367406350267179131284786574").longValue();
 
 	public static long[] SEED_ARRAY = {SEED_1, SEED_2, SEED_3, SEED_4, SEED_5, SEED_6, SEED_7, SEED_8, SEED_9, SEED_10};
 
