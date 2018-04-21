@@ -1,8 +1,6 @@
-import java.util.concurrent.Callable;
 import java.util.Arrays;
-
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 class Simulation implements Callable<Integer> {
 	private static final boolean USE_MEAN = false;
@@ -68,12 +66,12 @@ class Simulation implements Callable<Integer> {
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
         State s = new State();
-        //TFrame f = new TFrame(s);
+        TFrame f = new TFrame(s);
         while(!s.hasLost()) {
         	try {
             	s.makeMove(p.pickMove(s, s.legalMoves(), weightSets, h));
-            	//s.draw();
-            	//s.drawNext(0, 0);
+            	s.draw();
+            	s.drawNext(0, 0);
             } catch (Exception e) {
             	e.printStackTrace();
             	//LOGGER.log(Level.SEVERE, "an exception was thrown" , e);

@@ -1,13 +1,10 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 
 class SimulationPool {
@@ -51,6 +48,7 @@ class SimulationPool {
     * @return 
     **/
     public int[] startScheduler() {
+
         if(games <= 0 && weightSets == null) {  
             System.out.println("Please specify number of games and weights for each game");
             System.exit(-1);
@@ -100,6 +98,19 @@ class SimulationPool {
         // System.out.printf("Simulation took %.2g seconds\n", (double)(end-start)/1e9);
 
         return gamesResult;
+    }
+
+    public static void main(String[] args) {
+        // just duplicate your weights N times
+        double[][] sameSets = {{-0.396489302085096, -10.0, -2.56664780511225, -2.35342398024406, -6.48432970678569, -2.13002859727378},
+                {-0.396489302085096, -10.0, -2.56664780511225, -2.35342398024406, -6.48432970678569, -2.13002859727378},
+                {-0.396489302085096, -10.0, -2.56664780511225, -2.35342398024406, -6.48432970678569, -2.13002859727378},
+                {-0.396489302085096, -10.0, -2.56664780511225, -2.35342398024406, -6.48432970678569, -2.13002859727378}};
+
+        Heuristic newHeuristics = new Heuristic(false, true);
+        // you want to play 4 games at once.
+        SimulationPool SP = new SimulationPool(newHeuristics, 4, sameSets, 1);
+        SP.startScheduler();
     }
 
 }
