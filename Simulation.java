@@ -8,6 +8,8 @@ class Simulation implements Callable<Integer> {
 	private Heuristic h;
 	private double[] weightSets;
 	private int numRepetitions;
+	private long seed;
+	private int callNumber;
 
 	public Simulation() {
 		h = new Heuristic(false, true);
@@ -21,6 +23,14 @@ class Simulation implements Callable<Integer> {
 		this.numRepetitions = 1;
 	}
 
+	public Simulation(double[] weightSets, long seed, int callNumber) {
+		h = new Heuristic(false, true);
+		this.weightSets = weightSets;
+		this.numRepetitions = 1;
+		this.seed = seed;
+		this.callNumber = callNumber;
+	}
+
 	public Simulation(Heuristic h, double[] weightSets, int numRepetitions) {
 		this.h = h;
 		this.weightSets = weightSets;
@@ -32,14 +42,12 @@ class Simulation implements Callable<Integer> {
 		double[] results = new double[numRepetitions];
 		ArrayList<Integer> r = new ArrayList<>();
 		double sum = 0;
-		System.out.print("[");
 		for (int i = 0; i < numRepetitions; i++) { // compute sum
 			results[i] = playGame();
 			sum += results[i];
 			r.add((int) results[i]);
-			System.out.print(results[i] + ", ");
 		}
-		System.out.print("]\n");
+		System.out.print("Seed: " + callNumber + ": Rows cleared "+ results[0]);
 		Collections.sort((r));
 		return numRepetitions % 2 == 0 ? (int) (r.get(numRepetitions/2 + 1) + r.get(numRepetitions/2))/2 : r.get(numRepetitions/2);
 		//return (int) results[0];
@@ -51,7 +59,7 @@ class Simulation implements Callable<Integer> {
 	**/
 	public int playGame() {
 		PlayerSkeleton p = new PlayerSkeleton();
-        State s = new State();
+        State s = new State(seed);
         //new TFrame(s);
         while(!s.hasLost()) {
         	try {

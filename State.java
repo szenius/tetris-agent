@@ -1,6 +1,5 @@
 import java.awt.Color;
-
-
+import java.util.Random;
 
 
 public class State {
@@ -8,10 +7,10 @@ public class State {
 	public static final int ROWS = 21;
 	public static final int N_PIECES = 7;
 
-	
+	public Random RNG;
 
 	public boolean lost = false;
-	
+	public boolean useSeed = false;
 	
 	
 
@@ -155,7 +154,7 @@ public class State {
 	public int getTurnNumber() {
 		return turn;
 	}
-	
+
 	
 	
 	//constructor
@@ -163,13 +162,27 @@ public class State {
 		nextPiece = randomPiece();
 
 	}
+
+	public State(long seed) {
+		RNG.setSeed(seed);
+		useSeed = true;
+		nextPiece = randomPiece(true);
+
+	}
 	
 	//random integer, returns 0-6
 	private int randomPiece() {
 		return (int)(Math.random()*N_PIECES);
 	}
-	
 
+	//random integer, returns 0-6
+	private int randomPiece(boolean usePreSeed) {
+		if (usePreSeed) {
+			return (int) RNG.nextDouble()*N_PIECES;
+		} else {
+			return (int)(Math.random()*N_PIECES);
+		}
+	}
 
 	
 	//gives legal moves for 
@@ -250,7 +263,7 @@ public class State {
 	
 
 		//pick a new piece
-		nextPiece = randomPiece();
+		nextPiece = randomPiece(useSeed);
 		
 
 		
