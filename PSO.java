@@ -2,6 +2,7 @@ import JSwarm.net.sourceforge.jswarm_pso.Swarm;
 import java.util.*;
 
 public class PSO {
+	public static final boolean SIMULATED_ANNEALING = false;
 	public static void main(String[] args) {
 		Heuristic h = parseArgs(args);
 
@@ -23,7 +24,7 @@ public class PSO {
 	 * @return
 	**/
 	private static void run(Heuristic h) {
-		Swarm swarm = new Swarm(200
+		Swarm swarm = new Swarm(1000
 		, new TParticle(h.getNumFeatures())
 		, new TFitnessFunction(h));
 
@@ -32,11 +33,33 @@ public class PSO {
 		swarm.setMaxPosition(10);
 		swarm.setMinPosition(-10);
 
+		if (SIMULATED_ANNEALING) {
+			swarm.setInertia(2);
+			swarm.setGlobalIncrement(0.2);
+			swarm.setParticleIncrement(0.2);
+		}
+
 		// Optimize a few times
-		for( int i = 0; i < 20; i++ ) {
+		for( int i = 0; i < 10; i++ ) {
+			System.out.println("Starting iteration " + i + "; " + swarm.getNumberOfParticles() + " particles;\n" 
+				+ "Inertia: " + swarm.getInertia() + "; GIncrement: " + swarm.getGlobalIncrement()
+				+ "PIncrement: " + swarm.getParticleIncrement());
+
 			long startIt = System.currentTimeMillis();
+
+			// Run evolution for this iteration
 			swarm.evolve();
+
+			if (SIMULATED_ANNEALING) {
+				// After each evolution: reduce velocity of particles
+				// 						+ allow particles to get closer to local/global best
+				swarm.setInertia(swarm.getInertia() * 0.9);
+				swarm.setGlobalIncrement(swarm.getGlobalIncrement() * 1.15);
+				swarm.setParticleIncrement(swarm.getParticleIncrement() * 1.1);
+			}
+			
 			long endIt = System.currentTimeMillis();
+
 			System.out.println("Iteration " + i + ": " + swarm.toStringStats() + " in " + (endIt - startIt)/1e3 + " s");
 		}
 
